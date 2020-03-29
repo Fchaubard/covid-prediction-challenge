@@ -12,7 +12,7 @@ RUN apt-get -y install cron
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
-#RUN git clone https://github.com/CSSEGISandData/COVID-19.git /app/data
+RUN git clone https://github.com/CSSEGISandData/COVID-19.git /app/data
 
 FROM build-stage1 as build-stage2
 
