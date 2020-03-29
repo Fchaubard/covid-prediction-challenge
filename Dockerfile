@@ -1,6 +1,6 @@
 # Use the official lightweight Python image.
 # https://hub.docker.com/_/python
-FROM python:3.7-slim
+FROM python:3.7-slim AS build-stage1
 
 # Install production dependencies.
 RUN pip install Flask gunicorn
@@ -9,16 +9,17 @@ RUN pip install pandas
 RUN apt-get update
 RUN apt-get -y install git
 RUN apt-get -y install cron
-
-# Copy local code to the container image.
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
+#RUN git clone https://github.com/CSSEGISandData/COVID-19.git /app/data
 
-RUN git clone https://github.com/CSSEGISandData/COVID-19.git /app/data
-COPY crontab /etc/cron.d/crontab
-RUN chmod 0644 /etc/cron.d/crontab
-RUN service cron start
+FROM build-stage1 as build-stage2
+
+# Copy local code to the container image.
+#COPY crontab /etc/cron.d/crontab
+#RUN chmod 0644 /etc/cron.d/crontab
+#RUN service cron start
 
 
 # Run the web service on container startup. Here we use the gunicorn

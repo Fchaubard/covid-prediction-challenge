@@ -1,15 +1,24 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+
 {% extends "bootstrap/base.html" %}
 {% block content %}
 <div class="container-fluid">
-<h1>COVID-19 Predictions</h1>
+<h1>COVID-19 Prediction Challenge</h1>
 <div class="col-lg-auto col-lg-auto col-6-auto">
-Right now, it is extremely difficult to know the difference between outlandish, modest, politically motivated, financially motivated, plain lazy, or useless predictions on the effects of COVID-19 on the planet. There are predictions saying that it will infect 40% of the world, 70% of the world, and some play it really safe and say <a href="https://thehill.com/changing-america/well-being/prevention-cures/482794-officials-say-the-cdc-is-preparing-for"> 40-70% of the world </a>. The first 2 are wildly different but specific enough to be useful, the last is so broad it is not useful, this imputes a variance of 2.3 billion people?! We can not be more precise than that? Lets see..
+Right now, it is extremely difficult to know the difference between outlandish, modest, politically motivated, financially motivated, plain lazy, or useless predictions on the effects of COVID-19 on the planet. There are predictions saying that it will infect 40% of the world, 70% of the world, and some play it really safe and say <a href="https://thehill.com/changing-america/well-being/prevention-cures/482794-officials-say-the-cdc-is-preparing-for"> 40-70% of the world </a>. The first 2 are wildly different but specific enough to be useful, the last is so broad it is not useful, this imputes a variance of 2.3 billion people?! We can not be more precise than that? Lets see..<br/><br/>
 
-They and many others are reporting forecasts, some are wrong, some, as <a href="https://www.cnn.com/2020/03/22/world/doomsday-prophets-coronavirus-blake/index.html"> CNN reports </a>, are dangerous, some are fantastic (<a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"> here </a> is the article that convinced Trump to begin suppression, <a href="https://covidactnow.org/"> here is my personal favorite right now</a>, and <a href='https://github.com/daveselinger/covid-19-hackathon'>here</a>, <a href='https://github.com/coronafighter/coronaSEIR'>here</a>, <a href='https://midasnetwork.us/covid-19/'>here</a> , and <a href='https://github.com/HopkinsIDD/ncov_incubation'>here</a> are many others), but who is right? They all made many, many assumptions as all predictions must, they modeled it one way or another, some will be more right than others. So who to listen to? 
+Other forecasts report DRAMATICALLY less severe outcomes, including <a href="https://www.latimes.com/science/story/2020-03-22/coronavirus-outbreak-nobel-laureate?fbclid=IwAR3ztFYp7WVi2py5NYv8vwHRg6lMx6j5cfCsaQMRmbuAFCUBuULwQhnXHsk">this nobel laureate</a>. <br/><br/>
+
+They and many, many others are reporting forecasts. Some may be right, some may be wrong, some, as <a href="https://www.cnn.com/2020/03/22/world/doomsday-prophets-coronavirus-blake/index.html"> CNN reports </a>, are simply dangerous, some are backed with clear data and scientific rigor (i.e.<a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"> here </a> is the article that convinced Trump to begin suppression, <a href="https://covidactnow.org/"> here is my personal favorite right now</a>, and <a href='https://github.com/daveselinger/covid-19-hackathon'>here</a>, <a href='https://github.com/coronafighter/coronaSEIR'>here</a>, <a href='https://midasnetwork.us/covid-19/'>here</a> , and <a href='https://github.com/HopkinsIDD/ncov_incubation'>here</a> are many others), but who is right? They all made many assumptions as all predictions must, they modeled it one way or another, some will be more right than others. So who to listen to given the wild variance in predicted outcomes?
 <br/><br/>
 The world needs accurate COVID-19 infection/death models so that people can make informed decisions about how to react to the new realities around them. If you knew with 80% probability your grandmother was going to die in June, 2020, would you change something about your life? Would you tell her with confidence to do something different? Or if you knew that with 0.3% probability that she would die in June 2020, would that change your answer? If there is a difference, then that proves this initiative's worth. 
 <br/><br/>
-As AI workers, there is only so much that we can do to help this crisis. I am not a pathologist, I am not an epidemiologist, I am not a nurse, and I’m not a doctor. I know how to take large amounts of data, train models that will be robust enough to predict the future with some confidence interval based on a lot of best practices in Machine Learning. A useful thing I may be able to do is to provide a prediction that approaches the Shannon Bound for what is going to happen, how many people will die, when, where, and who. While this is horrible to consider, this is very useful for a number of reasons in my point of view. 
+As an AI worker, there is only so much that I can do to help this crisis. I am not a pathologist asdf , I am not an epidemiologist, I am not a nurse, and I’m not a doctor. I know how to take large amounts of data, train models that will be robust enough to predict the future with some confidence interval based on a lot of best practices in Machine Learning. A useful thing I may be able to do is to provide a prediction that approaches the Shannon Bound for what is going to happen, how many people will die, when, where, and who. While this is horrible to consider, this is very useful for a number of reasons in my point of view. 
 <br/><br/>
 <ul>
 <li>First, we will be able to react and change our lives conditioned upon this information. </li>
@@ -36,13 +45,27 @@ A predictions.csv must initially include the following columns: date (YYYY/MM/DD
 In the submit prediction form, you can submit the csv, name of submitter, and optionally add a github link / ipython nb. 
 
 <h1>Submissions</h1>
-COMING SOON.
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+   <div class="form-group">
+    <label for="exampleInputExtra">Github Repo / Website</label>
+    <input type="extra" class="form-control" id="exampleInputExtra" placeholder="(optional) add your github repo or link to your codebase">
+  </div>
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit Predictions</button>
+</form>
 
 <h1>Results</h1>
 COMING SOON.
 
-<h1>Most Recent Data</h1>
-All truth data is accessible and is updated nightly on a cron at 2am.
+<h1>Most Recently Scraped Global COVID-19 Data (Infections, Recoveries, Deaths)</h1>
+All truth data is accessible and is updated nightly on a cron at 2am. This is what will be used as truth.
 <ul>
     {% for file in files %}
     <li><a href=  "data/csse_covid_19_data/csse_covid_19_daily_reports/{{ file }}">{{ file }}</a></li>
