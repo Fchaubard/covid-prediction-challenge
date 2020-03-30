@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link href="  https://pagination.js.org/dist/2.0.7/pagination.css" rel="stylesheet">
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124148774-3"></script>
   <script>
@@ -20,6 +21,7 @@
   </script>
 
 <style>
+  a {color:#FF8484 }
   .primary-bg{
     background-color:rgb(53, 35, 74)
     }
@@ -32,6 +34,19 @@
   .row{
     margin:0
     }
+  .column{
+    flex-direction:column
+    }
+.pagination li {
+  padding:5px;
+  margin: 3px;
+  border: solid 1px #5C3B6F
+}
+.pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
   </style>
 </head>
 
@@ -119,6 +134,25 @@
 <!-- Leaderboard Section End-->
 
 
+<section class="mt-4">
+  <div class="col-sm-6"  id='fileList' >
+    <div class="card">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">Global COVID-19 Data (Infections, Recoveries, Deaths)</h4>
+      </div>
+      <div class="card-body">
+        <p>All truth data is accessible and is updated nightly on a cron at 2am. This is what will be used as truth.</p>
+        <div class="row column justify-content-center align-items-center">
+          <div class="col-sm-12">
+            <input type="text" class="fuzzy-search w-100" placeholder="Search..." />
+            <ul class="list-group list" id='' style="cursor:pointer"></ul>
+            <ul class="pagination"></ul>
+          </div>
+        </div>      
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <div class="mt-4 container-fluid">
@@ -164,7 +198,6 @@ In the submit prediction form, you can submit the csv, name of submitter, and op
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Github Repo / Website</label>
@@ -178,26 +211,49 @@ In the submit prediction form, you can submit the csv, name of submitter, and op
 </form>
 
 
-<h1>Results</h1>
-COMING SOON.
-
-<h1>Most Recently Scraped Global COVID-19 Data (Infections, Recoveries, Deaths)</h1>
-All truth data is accessible and is updated nightly on a cron at 2am. This is what will be used as truth.
-<ul>
-    {% for file in files %}
-    <li><a href= "data/csse_covid_19_data/csse_covid_19_daily_reports/{{ file }}">{{ file }}</a></li>
-    {% endfor %}
-</ul>
-
 <h1>Contributing to the Core Project</h1>
 If you would like to help on this project or you have any questions, please send a note to fchaubard [[at]] gmail.com. 
 </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <script>
+
+$(document).ready(function() {
+  $.get('/get/files', function (response) {
+    var values
+    var options = {
+        valueNames: ['name', 'link'],
+        item: `<li class="list-group-item" style="padding:0; display:flex; border: 1px solid #5C3B6F; padding: 10px">
+                <div class="d-flex justify-content-between align-items-center" style="width:100%; margin-left:1%">
+                  <p class="name" style="text-align:left; margin-bottom:0; margin-left:20px; width:100%"></p>
+                <div class="link"></div>
+              </div>
+              </li>`,
+        pagination: true,
+        page: 10,
+    };
+
+    var fileList = new List('fileList', options, values);
+
+
+    $.each(JSON.parse(response).files, function (k, file) {
+      fileList.add({
+              name: file.slice(0,10).replace("-", "/").replace("-", "/"),
+              link: `<a href="data/csse_covid_19_data/csse_covid_19_daily_reports/${file}">Download</a>`
+      })
+    })
+  })
+})
+
 
 //Changing nav item to active when selected
 $(".nav-item").click(function() {

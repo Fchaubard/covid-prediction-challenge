@@ -1,11 +1,10 @@
 import os
 from flask import Flask,render_template,request, url_for, redirect, abort, send_file
-from flask_bootstrap import Bootstrap
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
-Bootstrap(app)
 
 def get_files(req_path):
     BASE_DIR = './app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
@@ -26,12 +25,10 @@ def get_files(req_path):
 
     return sorted(files)
 
-
 @app.route("/", defaults={'req_path': ''})
 def index(req_path):
     files = get_files(req_path)
     return render_template('index.html',files=files)
-
 
 @app.route('/data/<path:req_path>')
 def dir_listing(req_path):
@@ -42,6 +39,12 @@ def dir_listing(req_path):
     except Exception as e:
         print(e)
         return "No such file."+req_path
+
+
+@app.route("/get/files", defaults={'req_path': ''})
+def serve_files(req_path):
+    files = get_files(req_path)
+    return json.dumps({'files':files}, indent=2)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=80)
