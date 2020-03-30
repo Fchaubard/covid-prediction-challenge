@@ -21,13 +21,15 @@ RUN mkdir -p /usr/local/gcloud \
 RUN pip install gsutil
 
 
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
+
 
 
 
 FROM build-stage1 as build-stage2
+
+ENV APP_HOME /app
+WORKDIR $APP_HOME
+COPY . ./
 
 RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
 
@@ -40,6 +42,7 @@ RUN touch /var/log/cron.log
 RUN crontab /etc/cron.d/crontab
 
 CMD cron && tail -f /var/log/cron.log
+
 # Run the cron on start
 CMD bash $APP_HOME/task.sh
 CMD exec gunicorn --bind :80 --workers 1 --threads 8 app:app
