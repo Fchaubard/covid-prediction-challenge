@@ -1,6 +1,5 @@
 import os
-
-from flask import Flask,render_template,request, url_for, redirect
+from flask import Flask,render_template,request, url_for, redirect, abort, send_file
 from flask_bootstrap import Bootstrap
 import pandas as pd
 
@@ -9,9 +8,13 @@ app = Flask(__name__)
 Bootstrap(app)
 
 def get_files(req_path):
-    try:
-        BASE_DIR = '/app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
 
+    BASE_DIR = './app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
+
+    # Joining the base and the requested path
+    abs_path = os.path.join(BASE_DIR, req_path)
+
+    try:
         # Joining the base and the requested path
         abs_path = os.path.join(BASE_DIR, req_path)
 
@@ -29,11 +32,12 @@ def get_files(req_path):
     except Exception as e:
         return []
 
-#@app.route('/data/<path:req_path>')
+
 @app.route("/", defaults={'req_path': ''})
 def index(req_path):
     files = get_files(req_path)
     return render_template('index.html',files=files)
+
 
 @app.route('/data/<path:req_path>')
 def dir_listing(req_path):
@@ -44,18 +48,6 @@ def dir_listing(req_path):
     except Exception as e:
         print(e)
         return "No such file."+req_path
-    # files = get_files(req_path)
-    # return render_template('files.html', files=files)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=80)
-
-# @app.route('/')
-# def home_page():
-#     target = os.environ.get('TARGET', 'World')
-#     Bootstrap(app)
-#     return 'Hello from FC majn MR.{}!\n'.format(target)
-
-# if __name__ == "__main__":
-#     app.run(debug=True,host='0.0.0.0',port=8080)
-#     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
