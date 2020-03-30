@@ -40,7 +40,6 @@
 .pagination li {
   padding:5px;
   margin: 3px;
-  border: solid 1px #5C3B6F
 }
 .pagination{
   display: flex;
@@ -145,7 +144,11 @@
         <div class="row column justify-content-center align-items-center">
           <div class="col-sm-12">
             <input type="text" class="fuzzy-search w-100" placeholder="Search..." />
-            <ul class="list-group list" id='' style="cursor:pointer"></ul>
+            <div class="d-flex justify-content-between align-items-center" style="width:100%;padding: 10px; background-color: #5C3B6F; color:white">
+              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:50%">DATE</p>
+              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:50%">LINK</p>
+          </div>
+            <ul class="list-group list" id='' style="cursor:pointer; padding-top:0px"></ul>
             <ul class="pagination"></ul>
           </div>
         </div>      
@@ -218,8 +221,6 @@ If you would like to help on this project or you have any questions, please send
 
 
 
-
-
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
@@ -232,10 +233,10 @@ $(document).ready(function() {
     var values
     var options = {
         valueNames: ['name', 'link'],
-        item: `<li class="list-group-item" style="padding:0; display:flex; border: 1px solid #5C3B6F; padding: 10px">
-                <div class="d-flex justify-content-between align-items-center" style="width:100%; margin-left:1%">
-                  <p class="name" style="text-align:left; margin-bottom:0; margin-left:20px; width:100%"></p>
-                <div class="link"></div>
+        item: `<li class="list-group-item" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
+                <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin:0">
+                  <p class="name" style="text-align:center; margin:0; width:50%"></p>
+                <div class="link w-50 text-center"></div>
               </div>
               </li>`,
         pagination: true,
@@ -248,9 +249,11 @@ $(document).ready(function() {
     $.each(JSON.parse(response).files, function (k, file) {
       fileList.add({
               name: file.slice(0,10).replace("-", "/").replace("-", "/"),
-              link: `<a href="data/csse_covid_19_data/csse_covid_19_daily_reports/${file}">Download</a>`
+              link: `<a style="margin:0" href="data/csse_covid_19_data/csse_covid_19_daily_reports/${file}">Download</a>`
       })
     })
+    // $(".pagination").find("li").addClass("page-item")
+    // $(".pagination").find("a").addClass("page-link")
   })
 })
 
