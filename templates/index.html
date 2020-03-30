@@ -10,9 +10,18 @@
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <style>
-  .primary-bg{background-color:rgb(53, 35, 74)}
-  .card-header{}
-  .row{margin:0}
+  .primary-bg{
+    background-color:rgb(53, 35, 74)
+    }
+  .header{
+    background-color: #D84C73; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+  .row{
+    margin:0
+    }
   </style>
 </head>
 
@@ -53,64 +62,56 @@
 
 <!-- Leaderboard Section -->
 <section class="mt-4">
-<div class="row">
-  <!-- Leaderboard -->
-  <div class="col-sm-6">
+  <div class="col-sm-12">
     <div class="card">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">Leaderboard</h4>
+      </div>
       <div class="card-body">
-        <div class="card-header">
-          <h4 class="card-title">Leaderboard</h4>
-        </div>
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">LinkedIn</th>
-              <th scope="col">Github</th>
-              <th scope="col">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Francois Chaubard</td>
-              <td>Here</td>
-              <td>Here</td>
-              <td>120</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob Thornton</td>
-              <td>Here</td>
-              <td>Here</td>
-              <td>110</td>
-            </tr>
-          </tbody>
-        </table>        
+        <div class="row">
+          <div class="col-sm-6">
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">LinkedIn</th>
+                  <th scope="col">Github</th>
+                  <th scope="col">Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Francois Chaubard</td>
+                  <td>Here</td>
+                  <td>Here</td>
+                  <td>120</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob Thornton</td>
+                  <td>Here</td>
+                  <td>Here</td>
+                  <td>110</td>
+                </tr>
+              </tbody>
+            </table>  
+          </div>
+          <div class="col-sm-6">
+            <div id="leaderboard-plot" style="width:100%"></div>
+          </div>
+        </div>      
       </div>
     </div>
   </div>
-  <!-- Leaderboard End -->
-
-  <!-- Leaderboard Graph -->
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Leaderboard</h4>
-        <div id="leaderboard-plot" style="width:100%"></div>
-      </div>
-    </div>
-  </div>
-  <!-- Leaderboard Graph End -->
-</div>
 </section>
 <!-- Leaderboard Section End-->
 
 
 
 
-<div class="container-fluid">
+<div class="mt-4 container-fluid">
 <h1>COVID-19 Prediction Challenge</h1>
 <div class="col-lg-auto col-lg-auto col-6-auto">
 Right now, it is extremely difficult to know the difference between outlandish, modest, politically motivated, financially motivated, plain lazy, or useless predictions on the effects of COVID-19 on the planet. There are predictions saying that it will infect 40% of the world, 70% of the world, and some play it really safe and say <a href="https://thehill.com/changing-america/well-being/prevention-cures/482794-officials-say-the-cdc-is-preparing-for"> 40-70% of the world </a>. The first 2 are wildly different but specific enough to be useful, the last is so broad it is not useful, this imputes a variance of 2.3 billion people?! We can not be more precise than that? Lets see..<br/><br/>
