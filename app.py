@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 def get_files(req_path):
 
-    BASE_DIR = '/app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
+    BASE_DIR = './app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
 
     # Joining the base and the requested path
     abs_path = os.path.join(BASE_DIR, req_path)
