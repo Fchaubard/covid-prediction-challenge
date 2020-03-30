@@ -8,9 +8,11 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i|Roboto+Mono:300,400,700|Roboto+Slab:300,400,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <style>
   .primary-bg{background-color:rgb(53, 35, 74)}
+  .card-header{}
+  .row{margin:0}
   </style>
 </head>
 
@@ -46,7 +48,68 @@
 </section>
 <!-- Navbar End -->
 
+<!-- Body -->
 <body>
+
+<!-- Leaderboard Section -->
+<section class="mt-4">
+<div class="row">
+  <!-- Leaderboard -->
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-header">
+          <h4 class="card-title">Leaderboard</h4>
+        </div>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">LinkedIn</th>
+              <th scope="col">Github</th>
+              <th scope="col">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Francois Chaubard</td>
+              <td>Here</td>
+              <td>Here</td>
+              <td>120</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob Thornton</td>
+              <td>Here</td>
+              <td>Here</td>
+              <td>110</td>
+            </tr>
+          </tbody>
+        </table>        
+      </div>
+    </div>
+  </div>
+  <!-- Leaderboard End -->
+
+  <!-- Leaderboard Graph -->
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Leaderboard</h4>
+        <div id="leaderboard-plot" style="width:100%"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Leaderboard Graph End -->
+</div>
+</section>
+<!-- Leaderboard Section End-->
+
+
+
+
 <div class="container-fluid">
 <h1>COVID-19 Prediction Challenge</h1>
 <div class="col-lg-auto col-lg-auto col-6-auto">
@@ -85,21 +148,24 @@ A predictions.csv must initially include the following columns: date (YYYY/MM/DD
 In the submit prediction form, you can submit the csv, name of submitter, and optionally add a github link / ipython nb. 
 
 <h1 id="submissions">Submissions</h1>
+
 <form>
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
-   <div class="form-group">
-    <label for="exampleInputExtra">Github Repo / Website</label>
-    <input type="extra" class="form-control" id="exampleInputExtra" placeholder="(optional) add your github repo or link to your codebase">
+  <div class="form-group">
+    <label for="exampleInputPassword1">Github Repo / Website</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
   </div>
-  <div class="custom-file">
-    <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Example file input</label>
+    <input type="file" class="form-control-file" id="exampleFormControlFile1">
   </div>
-  <button type="submit" class="btn btn-primary">Submit Predictions</button>
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
 
 <h1>Results</h1>
 COMING SOON.
@@ -128,6 +194,39 @@ $(".nav-item").click(function() {
   $(this).addClass("active")
 })
 
+trace1 = {
+  type: 'scatter',
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
+  mode: 'lines',
+  name: 'Red',
+  line: {
+    color: '#D84C73',
+    width: 3
+  }
+};
+
+trace2 = {
+  type: 'scatter',
+  x: [1, 2, 3, 4],
+  y: [12, 9, 15, 12],
+  mode: 'lines',
+  name: 'Blue',
+  line: {
+    color: '#5C3B6F',
+    width: 3
+  }
+};
+
+var layout = {
+  responsive: true,
+};
+
+var data = [trace1, trace2];
+
+Plotly.newPlot('leaderboard-plot', data, layout);
+
 </script>
 </body>
+<!-- Body End -->
 </html>
