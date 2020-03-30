@@ -9,24 +9,41 @@ RUN pip install pandas
 RUN apt-get update
 RUN apt-get -y install git
 RUN apt-get -y install cron
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
-RUN git clone https://github.com/CSSEGISandData/COVID-19.git /app/data
+RUN apt-get -y install curl
+
+# Downloading gcloud package
+RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
+
+# Installing the package
+RUN mkdir -p /usr/local/gcloud \
+  && tar -C /usr/local/gcloud -xvf /tmp/google-cloud-sdk.tar.gz \
+  && /usr/local/gcloud/google-cloud-sdk/install.sh
+RUN pip install gsutil
+
+
+
+
+
 
 FROM build-stage1 as build-stage2
 
-# Copy local code to the container image.
-#COPY crontab /etc/cron.d/crontab
-#RUN chmod 0644 /etc/cron.d/crontab
+ENV APP_HOME /app
+WORKDIR $APP_HOME
+COPY . ./
+
+RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
+
+
+# Setup the cron
+COPY crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab
 #RUN service cron start
+RUN touch /var/log/cron.log
+RUN crontab /etc/cron.d/crontab
 
+CMD cron && tail -f /var/log/cron.log
 
-# Run the web service on container startup. Here we use the gunicorn
-# webserver, with one worker process and 8 threads.
-# For environments with multiple CPU cores, increase the number of workers
-# to be equal to the cores available.
-
+# Run the cron on start
+CMD bash $APP_HOME/task.sh
 CMD exec gunicorn --bind :80 --workers 1 --threads 8 app:app
 
-#CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 app:app

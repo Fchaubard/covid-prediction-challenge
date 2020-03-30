@@ -187,7 +187,7 @@ The way we will do this is the following:
 3. In order to prevent an unfair advantage of the natural autoregressive properties of the dependent variables, we do not score the first week of any submission and certainly not days before the submission date. Thus, we will not calculate and you will not see your scores until a week after the submission date. Thereafter, you will see your scores update at 2am every night.
 4. We will rank and publish the full report of the top 10 submissions that will change daily.
  <h1>Getting started</h1>
-Getting started is very easy. We will provide a starter ipython notebook that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
+Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
 A predictions.csv must initially include the following columns: date (YYYY/MM/DD) starting a week after submission date (all previous dates/rows will be ignored anyway), # of people infected globally, and death rate globally. Then later if people are using this, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
 
 In the submit prediction form, you can submit the csv, name of submitter, and optionally add a github link / ipython nb. 
