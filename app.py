@@ -11,6 +11,7 @@ os.system("bash /app/task.sh") # I can not figure out any other way to do this!!
 
 Bootstrap(app)
 
+
 def get_files(req_path):
 
     BASE_DIR = '/app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
@@ -37,12 +38,10 @@ def get_files(req_path):
         print(e)
         return []
 
-
 @app.route("/", defaults={'req_path': ''})
 def index(req_path):
     files = get_files(req_path)
     return render_template('index.html',files=files)
-
 
 @app.route('/data/<path:req_path>')
 def dir_listing(req_path):
@@ -62,6 +61,12 @@ def dir_listing(req_path):
             print(e)
             return "No such file."+req_path
 
+
+
+@app.route("/get/files", defaults={'req_path': ''})
+def serve_files(req_path):
+    files = get_files(req_path)
+    return json.dumps({'files':files}, indent=2)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=80)

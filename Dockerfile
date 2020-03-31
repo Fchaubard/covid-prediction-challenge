@@ -22,21 +22,22 @@ FROM build-stage1 as build-stage2
 
 ENV APP_HOME /app
 WORKDIR $APP_HOME
-COPY . ./
+ADD . ./
 
 #RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
 
 # Setup the cron
-#COPY crontab /etc/cron.d/crontab
+COPY crontab /etc/cron.d/crontab
 
-#RUN chmod 0644 /etc/cron.d/crontab \
-#  && touch /var/log/cron.log \
-#  && crontab /etc/cron.d/crontab \
-#  && cron \
-#  && tail -f /var/log/cron.log
+CMD chmod 0644 /etc/cron.d/crontab \
+  && touch /var/log/cron.log \
+  && crontab /etc/cron.d/crontab \
+  && cron \
+  && tail -f /var/log/cron.log
 
 #CMD ["/bin/bash","/app/task.sh"]
 #CMD bash /app/task.sh
+
 
 # Run the webserver
 CMD cd $APP_HOME && \
