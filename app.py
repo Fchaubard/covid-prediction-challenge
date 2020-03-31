@@ -63,6 +63,12 @@ def dir_listing(req_path):
 
 
 
+@app.route('/update_leaderboard')
+def update_leaderboard():
+    os.system("bash /app/task.sh")
+    return "updated successfully"
+
+
 @app.route("/get/files", defaults={'req_path': ''})
 def serve_files(req_path):
     files = get_files(req_path)

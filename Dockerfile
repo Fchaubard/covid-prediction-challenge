@@ -26,14 +26,15 @@ ADD . ./
 
 #RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
 
-# Setup the cron
-COPY crontab /etc/cron.d/crontab
+# Setup the cron... this doesnt work on GCE 
+#   moving to Google Cron -> covidepredictions.com/update_leaderboard
+#COPY crontab /etc/cron.d/crontab
 
-CMD chmod 0644 /etc/cron.d/crontab \
-  && touch /var/log/cron.log \
-  && crontab /etc/cron.d/crontab \
-  && cron \
-  && tail -f /var/log/cron.log
+#CMD chmod 0644 /etc/cron.d/crontab \
+#  && touch /var/log/cron.log \
+#  && crontab /etc/cron.d/crontab \
+#  && cron \
+#  && tail -f /var/log/cron.log
 
 #CMD ["/bin/bash","/app/task.sh"]
 #CMD bash /app/task.sh

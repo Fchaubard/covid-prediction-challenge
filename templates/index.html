@@ -64,16 +64,16 @@
         <a class="nav-link" href="#">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">How this Works</a>
+        <a class="nav-link" href="#how_this_works">How this Works</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Getting Started</a>
+        <a class="nav-link" href="#getting_started">Getting Started</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#submissions">Submissions</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Leaderboards</a>
+        <a class="nav-link" href="#leaderboard">Leaderboards</a>
       </li>
     </ul>
   </div>
@@ -104,8 +104,8 @@
                   <th scope="col">Score</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
+              <tbody id="leaderboard_tbody">
+<!--                 <tr>
                   <th scope="row">1</th>
                   <td>Francois Chaubard</td>
                   <td>Here</td>
@@ -118,7 +118,7 @@
                   <td>Here</td>
                   <td>Here</td>
                   <td>110</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>  
           </div>
@@ -181,7 +181,7 @@ Predicting deaths and number of sick people is an unfortunate reality, but it mu
 
 For those of you like me who want to help this cause with their skill set please contribute a prediction. 
 
-<h1>How this works</h1>
+<h1 id="how_this_works">How this works</h1>
 In science, it is control and careful analysis that allow us to know anything with any amount of certainty. That is what this project offers. 
 
 The way we will do this is the following:
@@ -189,7 +189,7 @@ The way we will do this is the following:
 2. We will pull that data every night and measure the accuracy of all the submissions against that day and the previous days. 
 3. In order to prevent an unfair advantage of the natural autoregressive properties of the dependent variables, we do not score the first week of any submission and certainly not days before the submission date. Thus, we will not calculate and you will not see your scores until a week after the submission date. Thereafter, you will see your scores update at 2am every night.
 4. We will rank and publish the full report of the top 10 submissions that will change daily.
- <h1>Getting started</h1>
+ <h1 id="getting_started">Getting started</h1>
 Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
 A predictions.csv must initially include the following columns: date (YYYY/MM/DD) starting a week after submission date (all previous dates/rows will be ignored anyway), # of people infected globally, and death rate globally. Then later if people are using this, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
 
@@ -264,6 +264,7 @@ $(".nav-item").click(function() {
   $(this).addClass("active")
 })
 
+
 //Plotly Leaderboard
 trace1 = {
   type: 'scatter',
@@ -296,6 +297,22 @@ var layout = {
 var data = [trace1, trace2];
 
 Plotly.newPlot('leaderboard-plot', data, layout);
+
+// // Leaderboard tbody
+// $(document).ready(function () {
+//     $.getJSON('./data/leaderboard.json',
+//     function (json) {
+//         var tr;
+//         for (var i in json) {
+//             tr = $('<tr/>');
+//             tr.append("<td>" + json[i].email_address + "</td>");
+//             tr.append("<td>" + json[i].github_link + "</td>");
+//             tr.append("<td>" + json[i].linkedin_link + "</td>");
+//             tr.append("<td>" + json[i].scores.World + "</td>");
+//             $('leaderboard_tbody').append(tr);
+//         }
+//     });
+// });
 
 </script>
 </body>
