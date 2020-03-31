@@ -2,14 +2,8 @@
 # https://hub.docker.com/_/python
 FROM python:3.7-slim AS build-stage1
 
-# Install production dependencies.
-RUN pip install Flask gunicorn
-RUN pip install flask-bootstrap
-RUN pip install pandas
-RUN apt-get update
-RUN apt-get -y install git
-RUN apt-get -y install cron
-RUN apt-get -y install curl
+RUN apt-get --no-install-recommends update \
+  && apt-get --no-install-recommends -y install git cron curl 
 
 # Downloading gcloud package
 RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
@@ -18,12 +12,11 @@ RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tm
 RUN mkdir -p /usr/local/gcloud \
   && tar -C /usr/local/gcloud -xvf /tmp/google-cloud-sdk.tar.gz \
   && /usr/local/gcloud/google-cloud-sdk/install.sh
-RUN pip install gsutil
 
+RUN rm /tmp/google-cloud-sdk.tar.gz 
 
-
-
-
+# Install production dependencies.
+RUN pip install Flask gunicorn flask-bootstrap pandas gsutil
 
 FROM build-stage1 as build-stage2
 
@@ -31,19 +24,22 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
-RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
-
+#RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
 
 # Setup the cron
-COPY crontab /etc/cron.d/crontab
-RUN chmod 0644 /etc/cron.d/crontab
-#RUN service cron start
-RUN touch /var/log/cron.log
-RUN crontab /etc/cron.d/crontab
+#COPY crontab /etc/cron.d/crontab
 
-CMD cron && tail -f /var/log/cron.log
+#RUN chmod 0644 /etc/cron.d/crontab \
+#  && touch /var/log/cron.log \
+#  && crontab /etc/cron.d/crontab \
+#  && cron \
+#  && tail -f /var/log/cron.log
 
-# Run the cron on start
-CMD bash $APP_HOME/task.sh
-CMD exec gunicorn --bind :80 --workers 1 --threads 8 app:app
+#CMD ["/bin/bash","/app/task.sh"]
+#CMD bash /app/task.sh
+
+# Run the webserver
+CMD cd $APP_HOME && \
+  exec gunicorn --bind :80 --workers 1 --threads 8 app:app
+
 

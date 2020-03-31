@@ -7,6 +7,8 @@ import os
 
 app = Flask(__name__)
 
+os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+
 Bootstrap(app)
 
 def get_files(req_path):
@@ -54,10 +56,10 @@ def dir_listing(req_path):
             return "No such file."+req_path
     else:
         try:
+            # os.system("bash /app/task.sh")
             return json.load(open('data/'+req_path,'r'))
         except Exception as e:
             print(e)
-            os.system("bash /app/task.sh")
             return "No such file."+req_path
 
 
