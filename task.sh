@@ -1,7 +1,21 @@
 #!/bin/sh
 BASEDIR=/app
 REPOSRC=https://github.com/CSSEGISandData/COVID-19.git
-LOCALREPO=$BASEDIR/data
+LOCALREPO=$BASEDIR/data/covid_truth/jhu/
+
+# We do it this way so that we can abstract if from just git later on
+LOCALREPO_VC_DIR=$LOCALREPO/.git
+
+if [ ! -d $LOCALREPO_VC_DIR ]
+then
+    git clone $REPOSRC $LOCALREPO/
+else
+    cd $LOCALREPO
+    git pull $REPOSRC
+fi
+
+REPOSRC=https://github.com/nytimes/covid-19-data.git
+LOCALREPO=$BASEDIR/data/covid_truth/nyt/
 
 # We do it this way so that we can abstract if from just git later on
 LOCALREPO_VC_DIR=$LOCALREPO/.git
@@ -24,5 +38,6 @@ fi
 
 gsutil rsync -r gs://covid_website_data/ $GOOGLESTORAGEPATH
 
-python $BASEDIR/updateresults.py $GOOGLESTORAGEPATH $LOCALREPO
+python $BASEDIR/updateresults.py 
+
 # End

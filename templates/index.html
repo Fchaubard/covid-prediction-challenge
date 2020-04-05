@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <link href="  https://pagination.js.org/dist/2.0.7/pagination.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124148774-3"></script>
   <script>
@@ -83,8 +84,37 @@
 
 <!-- Body -->
 <body>
+  <div class="container">
+    <nav class="navbar navbar-light bg-light mb-3">
+      <div class="d-flex align-items-center">
+        <div class="input-group mr-5">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="place">Place</label>
+          </div>
+          <select class="custom-select" id="place">
+          </select>
+        </div>
+        <div class="custom-control custom-checkbox mr-5">
+          <input type="checkbox" class="custom-control-input" id="logOption">
+          <label class="custom-control-label" for="logOption">Log</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="dydxOption">
+          <label class="custom-control-label" for="dydxOption">dy/dx</label>
+        </div>
+      </div>
+    </nav>
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <h6>Leaderboard</h6>
+        <div class="list-group leaderboard"></div>
+      </div>
+      <div class="col-12 col-md-8" id="chart" height="500"></div>
+    </div>
+  </div>
 
 <!-- Leaderboard Section -->
+<!-- 
 <section class="mt-4">
   <div class="col-sm-12">
     <div class="card">
@@ -129,7 +159,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!-- Leaderboard Section End-->
 
 
@@ -228,89 +258,89 @@ If you would like to help on this project or you have any questions, please send
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <script>
 
-$(document).ready(function() {
-  $.get('/get/files', function (response) {
-    var values
-    var options = {
-        valueNames: ['name', 'link'],
-        item: `<li class="list-group-item" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
-                <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin:0">
-                  <p class="name" style="text-align:center; margin:0; width:50%"></p>
-                <div class="link w-50 text-center"></div>
-              </div>
-              </li>`,
-        pagination: true,
-        page: 10,
-    };
+// $(document).ready(function() {
+//   $.get('/get/files', function (response) {
+//     var values
+//     var options = {
+//         valueNames: ['name', 'link'],
+//         item: `<li class="list-group-item" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
+//                 <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin:0">
+//                   <p class="name" style="text-align:center; margin:0; width:50%"></p>
+//                 <div class="link w-50 text-center"></div>
+//               </div>
+//               </li>`,
+//         pagination: true,
+//         page: 10,
+//     };
 
-    var fileList = new List('fileList', options, values);
-
-
-    $.each(JSON.parse(response).files, function (k, file) {
-      fileList.add({
-              name: file.slice(0,10).replace("-", "/").replace("-", "/"),
-              link: `<a style="margin:0" href="data/csse_covid_19_data/csse_covid_19_daily_reports/${file}">Download</a>`
-      })
-    })
-    // $(".pagination").find("li").addClass("page-item")
-    // $(".pagination").find("a").addClass("page-link")
-  })
-})
+//     var fileList = new List('fileList', options, values);
 
 
-//Changing nav item to active when selected
-$(".nav-item").click(function() {
-  $(".nav-item").removeClass("active")
-  $(this).addClass("active")
-})
+//     $.each(JSON.parse(response).files, function (k, file) {
+//       fileList.add({
+//               name: file.slice(0,10).replace("-", "/").replace("-", "/"),
+//               link: `<a style="margin:0" href="data/csse_covid_19_data/csse_covid_19_daily_reports/${file}">Download</a>`
+//       })
+//     })
+//     // $(".pagination").find("li").addClass("page-item")
+//     // $(".pagination").find("a").addClass("page-link")
+//   })
+// })
 
 
-//Plotly Leaderboard
-trace1 = {
-  type: 'scatter',
-  x: ['1/22/20','1/23/20','1/24/20','1/25/20','1/26/20','1/27/20','1/28/20','1/29/20','1/30/20','1/31/20','2/1/20','2/2/20','2/3/20','2/4/20','2/5/20','2/6/20','2/7/20','2/8/20','2/9/20','2/10/20','2/11/20','2/12/20','2/13/20','2/14/20','2/15/20','2/16/20','2/17/20','2/18/20','2/19/20','2/20/20','2/21/20','2/22/20','2/23/20','2/24/20','2/25/20','2/26/20','2/27/20','2/28/20','2/29/20','3/1/20','3/2/20','3/3/20','3/4/20','3/5/20','3/6/20','3/7/20','3/8/20','3/9/20','3/10/20','3/11/20','3/12/20','3/13/20','3/14/20','3/15/20','3/16/20','3/17/20','3/18/20','3/19/20','3/20/20','3/21/20','3/22/20','3/23/20','3/24/20','3/25/20','3/26/20','3/27/20','3/28/20','3/29/20'],
-  y: [17,18,26,42,56,82,131,133,171,213,259,362,426,492,564,634,719,806,906,1013,1113,1118,1371,1523,1666,1770,1868,2007,2122,2247,2251,2458,2469,2629,2708,2770,2814,2872,2941,2996,3085,3160,3254,3348,3460,3558,3802,3988,4262,4615,4720,5404,5819,6440,7126,7905,8733,9867,11299,12973,14651,16505,18625,21181,23970,27198,30652,33925],
-  mode: 'markers',
-  name: 'WHO Truth Data',
-  marker: {
-    color: 'rgba(156, 165, 196, 0.95)',
-    // line: {
-    //   color: 'rgba(156, 165, 196, 1.0)',
-    //   width: 1,
-    // },
-    symbol: 'circle',
-    size: 16
-  }
-};
+// //Changing nav item to active when selected
+// $(".nav-item").click(function() {
+//   $(".nav-item").removeClass("active")
+//   $(this).addClass("active")
+// })
 
-trace2 = {
-  type: 'scatter',
-  x: ['1/22/20','1/23/20','1/24/20','1/25/20','1/26/20','1/27/20','1/28/20','1/29/20','1/30/20','1/31/20','2/1/20','2/2/20','2/3/20','2/4/20','2/5/20','2/6/20','2/7/20','2/8/20','2/9/20','2/10/20','2/11/20','2/12/20','2/13/20','2/14/20','2/15/20','2/16/20','2/17/20','2/18/20','2/19/20','2/20/20','2/21/20','2/22/20','2/23/20','2/24/20','2/25/20','2/26/20','2/27/20','2/28/20','2/29/20','3/1/20','3/2/20','3/3/20','3/4/20','3/5/20','3/6/20','3/7/20','3/8/20','3/9/20','3/10/20','3/11/20','3/12/20','3/13/20','3/14/20','3/15/20','3/16/20','3/17/20','3/18/20','3/19/20','3/20/20','3/21/20','3/22/20','3/23/20','3/24/20','3/25/20','3/26/20','3/27/20','3/28/20','3/29/20','3/30/20','3/31/20','4/1/20','4/2/20','4/3/20','4/4/20','4/5/20','4/6/20','4/7/20','4/8/20','4/9/20','4/10/20','4/11/20','4/12/20','4/13/20','4/14/20','4/15/20','4/16/20','4/17/20','4/18/20','4/19/20','4/20/20','4/21/20','4/22/20','4/23/20','4/24/20','4/25/20','4/26/20','4/27/20','4/28/20','4/29/20','4/30/20','5/1/20','5/2/20','5/3/20','5/4/20','5/5/20','5/6/20','5/7/20','5/8/20','5/9/20','5/10/20','5/11/20','5/12/20','5/13/20','5/14/20','5/15/20','5/16/20','5/17/20','5/18/20','5/19/20','5/20/20','5/21/20','5/22/20','5/23/20','5/24/20','5/25/20','5/26/20','5/27/20','5/28/20','5/29/20','5/30/20','5/31/20','6/1/20','6/2/20','6/3/20','6/4/20','6/5/20','6/6/20','6/7/20','6/8/20','6/9/20','6/10/20','6/11/20','6/12/20','6/13/20','6/14/20','6/15/20','6/16/20','6/17/20','6/18/20','6/19/20','6/20/20','6/21/20','6/22/20','6/23/20','6/24/20','6/25/20','6/26/20','6/27/20','6/28/20','6/29/20','6/30/20','7/1/20','7/2/20','7/3/20','7/4/20','7/5/20','7/6/20','7/7/20','7/8/20','7/9/20','7/10/20','7/11/20','7/12/20','7/13/20','7/14/20','7/15/20','7/16/20','7/17/20','7/18/20','7/19/20','7/20/20','7/21/20','7/22/20','7/23/20','7/24/20','7/25/20','7/26/20','7/27/20','7/28/20','7/29/20','7/30/20','7/31/20','8/1/20','8/2/20','8/3/20','8/4/20','8/5/20','8/6/20','8/7/20','8/8/20'],
-  y: [27,30,33,37,41,46,51,57,63,70,78,87,97,107,119,133,147,164,182,202,225,250,277,308,342,380,422,469,521,579,643,715,794,882,980,1088,1209,1343,1492,1657,1841,2045,2271,2523,2802,3113,3458,3841,4266,4739,5263,5846,6494,7213,8012,8899,9884,10978,12193,13543,15041,16705,18553,20605,22883,25413,28222,31340,34802,38644,42909,47643,52897,58727,65196,72372,80333,89162,98953,109808,121840,135175,149949,166314,184434,204491,226683,251228,278363,308344,341452,377990,418284,462688,511578,565358,624456,689326,760441,838300,923413,1016307,1117513,1227563,1346979,1476263,1615886,1766276,1927798,2100743,2285311,2481591,2689549,2909008,3139638,3380948,3632273,3892781,4161473,4437191,4718639,5004402,5292973,5582784,5872240,6159754,6443780,6722850,6995597,7260786,7517326,7764293,8000928,8226644,8441022,8643803,8834875,9014259,9182097,9338630,9484185,9619158,9743996,9859185,9965240,10062686,10152056,10233881,10308680,10376960,10439207,10495887,10547442,10594290,10636822,10675405,10710379,10742062,10770745,10796698,10820169,10841387,10860560,10877878,10893516,10907633,10920372,10931867,10942236,10951587,10960019,10967621,10974474,10980651,10986218,10991234,10995753,10999825,11003494,11006798,11009775,11012456,11014871,11017046,11019004,11020768,11022356,11023787,11025075,11026234,11027279,11028219,11029066,11029828,11030514,11031132,11031689,11032190,11032641,11033047],
-  mode: 'lines',
-  name: 'Most Accurate Prediction',
-  line: {
-    color: '#5C3B6F',
-    width: 2
-  }
-};
 
-var layout = {
-	title: 'Global Deaths: Truth vs. Prediction',
-  	responsive: true,
-  	hovermode: 'closest',
-  	legend: {
-	    font: {
-	      size: 10,
-	    },
-    yanchor: 'middle',
-    xanchor: 'right',
-  	},
-};
+// //Plotly Leaderboard
+// trace1 = {
+//   type: 'scatter',
+//   x: ['1/22/20','1/23/20','1/24/20','1/25/20','1/26/20','1/27/20','1/28/20','1/29/20','1/30/20','1/31/20','2/1/20','2/2/20','2/3/20','2/4/20','2/5/20','2/6/20','2/7/20','2/8/20','2/9/20','2/10/20','2/11/20','2/12/20','2/13/20','2/14/20','2/15/20','2/16/20','2/17/20','2/18/20','2/19/20','2/20/20','2/21/20','2/22/20','2/23/20','2/24/20','2/25/20','2/26/20','2/27/20','2/28/20','2/29/20','3/1/20','3/2/20','3/3/20','3/4/20','3/5/20','3/6/20','3/7/20','3/8/20','3/9/20','3/10/20','3/11/20','3/12/20','3/13/20','3/14/20','3/15/20','3/16/20','3/17/20','3/18/20','3/19/20','3/20/20','3/21/20','3/22/20','3/23/20','3/24/20','3/25/20','3/26/20','3/27/20','3/28/20','3/29/20'],
+//   y: [17,18,26,42,56,82,131,133,171,213,259,362,426,492,564,634,719,806,906,1013,1113,1118,1371,1523,1666,1770,1868,2007,2122,2247,2251,2458,2469,2629,2708,2770,2814,2872,2941,2996,3085,3160,3254,3348,3460,3558,3802,3988,4262,4615,4720,5404,5819,6440,7126,7905,8733,9867,11299,12973,14651,16505,18625,21181,23970,27198,30652,33925],
+//   mode: 'markers',
+//   name: 'WHO Truth Data',
+//   marker: {
+//     color: 'rgba(156, 165, 196, 0.95)',
+//     // line: {
+//     //   color: 'rgba(156, 165, 196, 1.0)',
+//     //   width: 1,
+//     // },
+//     symbol: 'circle',
+//     size: 16
+//   }
+// };
 
-var data = [trace1,trace2];
+// trace2 = {
+//   type: 'scatter',
+//   x: ['1/22/20','1/23/20','1/24/20','1/25/20','1/26/20','1/27/20','1/28/20','1/29/20','1/30/20','1/31/20','2/1/20','2/2/20','2/3/20','2/4/20','2/5/20','2/6/20','2/7/20','2/8/20','2/9/20','2/10/20','2/11/20','2/12/20','2/13/20','2/14/20','2/15/20','2/16/20','2/17/20','2/18/20','2/19/20','2/20/20','2/21/20','2/22/20','2/23/20','2/24/20','2/25/20','2/26/20','2/27/20','2/28/20','2/29/20','3/1/20','3/2/20','3/3/20','3/4/20','3/5/20','3/6/20','3/7/20','3/8/20','3/9/20','3/10/20','3/11/20','3/12/20','3/13/20','3/14/20','3/15/20','3/16/20','3/17/20','3/18/20','3/19/20','3/20/20','3/21/20','3/22/20','3/23/20','3/24/20','3/25/20','3/26/20','3/27/20','3/28/20','3/29/20','3/30/20','3/31/20','4/1/20','4/2/20','4/3/20','4/4/20','4/5/20','4/6/20','4/7/20','4/8/20','4/9/20','4/10/20','4/11/20','4/12/20','4/13/20','4/14/20','4/15/20','4/16/20','4/17/20','4/18/20','4/19/20','4/20/20','4/21/20','4/22/20','4/23/20','4/24/20','4/25/20','4/26/20','4/27/20','4/28/20','4/29/20','4/30/20','5/1/20','5/2/20','5/3/20','5/4/20','5/5/20','5/6/20','5/7/20','5/8/20','5/9/20','5/10/20','5/11/20','5/12/20','5/13/20','5/14/20','5/15/20','5/16/20','5/17/20','5/18/20','5/19/20','5/20/20','5/21/20','5/22/20','5/23/20','5/24/20','5/25/20','5/26/20','5/27/20','5/28/20','5/29/20','5/30/20','5/31/20','6/1/20','6/2/20','6/3/20','6/4/20','6/5/20','6/6/20','6/7/20','6/8/20','6/9/20','6/10/20','6/11/20','6/12/20','6/13/20','6/14/20','6/15/20','6/16/20','6/17/20','6/18/20','6/19/20','6/20/20','6/21/20','6/22/20','6/23/20','6/24/20','6/25/20','6/26/20','6/27/20','6/28/20','6/29/20','6/30/20','7/1/20','7/2/20','7/3/20','7/4/20','7/5/20','7/6/20','7/7/20','7/8/20','7/9/20','7/10/20','7/11/20','7/12/20','7/13/20','7/14/20','7/15/20','7/16/20','7/17/20','7/18/20','7/19/20','7/20/20','7/21/20','7/22/20','7/23/20','7/24/20','7/25/20','7/26/20','7/27/20','7/28/20','7/29/20','7/30/20','7/31/20','8/1/20','8/2/20','8/3/20','8/4/20','8/5/20','8/6/20','8/7/20','8/8/20'],
+//   y: [27,30,33,37,41,46,51,57,63,70,78,87,97,107,119,133,147,164,182,202,225,250,277,308,342,380,422,469,521,579,643,715,794,882,980,1088,1209,1343,1492,1657,1841,2045,2271,2523,2802,3113,3458,3841,4266,4739,5263,5846,6494,7213,8012,8899,9884,10978,12193,13543,15041,16705,18553,20605,22883,25413,28222,31340,34802,38644,42909,47643,52897,58727,65196,72372,80333,89162,98953,109808,121840,135175,149949,166314,184434,204491,226683,251228,278363,308344,341452,377990,418284,462688,511578,565358,624456,689326,760441,838300,923413,1016307,1117513,1227563,1346979,1476263,1615886,1766276,1927798,2100743,2285311,2481591,2689549,2909008,3139638,3380948,3632273,3892781,4161473,4437191,4718639,5004402,5292973,5582784,5872240,6159754,6443780,6722850,6995597,7260786,7517326,7764293,8000928,8226644,8441022,8643803,8834875,9014259,9182097,9338630,9484185,9619158,9743996,9859185,9965240,10062686,10152056,10233881,10308680,10376960,10439207,10495887,10547442,10594290,10636822,10675405,10710379,10742062,10770745,10796698,10820169,10841387,10860560,10877878,10893516,10907633,10920372,10931867,10942236,10951587,10960019,10967621,10974474,10980651,10986218,10991234,10995753,10999825,11003494,11006798,11009775,11012456,11014871,11017046,11019004,11020768,11022356,11023787,11025075,11026234,11027279,11028219,11029066,11029828,11030514,11031132,11031689,11032190,11032641,11033047],
+//   mode: 'lines',
+//   name: 'Most Accurate Prediction',
+//   line: {
+//     color: '#5C3B6F',
+//     width: 2
+//   }
+// };
 
-Plotly.newPlot('leaderboard-plot', data, layout);
+// var layout = {
+// 	title: 'Global Deaths: Truth vs. Prediction',
+//   	responsive: true,
+//   	hovermode: 'closest',
+//   	legend: {
+// 	    font: {
+// 	      size: 10,
+// 	    },
+//     yanchor: 'middle',
+//     xanchor: 'right',
+//   	},
+// };
+
+// var data = [trace1,trace2];
+
+// Plotly.newPlot('leaderboard-plot', data, layout);
 
 // // Leaderboard tbody
 // $(document).ready(function () {
@@ -329,6 +359,90 @@ Plotly.newPlot('leaderboard-plot', data, layout);
 // });
 
 </script>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!-- <script src="{{ url_for('static', filename="js/utils.js")}}"></script> -->
+<!-- 
+<script>
+const csv = text => text.split('\n').map(line => line.split(','));
+
+const formatSnakeCase = text => {
+  let formattedText = text.replace(/_/g, ' ');
+  return formattedText[0].toUpperCase() + formattedText.substr(1);
+}
+
+
+const loadAllData = () => Promise.all([
+  fetch('{{ url_for('static', filename='images/data/leaderboard.json')}}').then(response => response.json()),
+  fetch('{{ url_for('static', filename='images/data/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')}}').then(response => response.text()).then(csv)
+]).then(([leaderboard, globalDeaths]) => {
+  return Promise.all(
+    Object.keys(leaderboard)
+      .map(key => 
+        fetch(`{{url_for('static',filename='images/data/')}}google_storage_data/predictions/${key}/predictions.csv`)
+          .then(response => response.text())
+          .then(csv)
+      )
+  ).then(responses => {
+    Object.keys(leaderboard).forEach((key, index) => {
+      leaderboard[key].predictions = responses[index].splice(1);
+    })
+
+    return {
+      leaderboard,
+      globalDeaths: globalDeaths.map(r => r[0] === 'WORLD' ? ['World', ...r.slice(1)] : r),
+      places: globalDeaths.map(r => r[0] === 'WORLD' ? 'World' : r[0]).slice(1).sort()
+    }
+  })
+});
+
+const getLeaderboardChildren = () => Array.from(document.querySelector(selectors.leaderboard).children)
+
+const getFilteredByPlaceLeaderborardsKeys = () => {
+  const { place } = getOptions();
+  return Object.keys(data.leaderboard)
+    .filter(key => data.leaderboard[key].scores[place])
+}
+
+const getLeaderboardEntries = (leaderboardKeys) => {
+  const { place } = getOptions();
+  return leaderboardKeys
+    .map(key => ({
+      id: key,
+      ...data.leaderboard[key]
+    }))
+    .sort((a, b) => {
+      if (a.scores[place] < b.scores[place]) {
+        return 1;
+      } else if (a.scores[place] > b.scores[place]) {
+        return -1;
+      }
+
+      return 0;
+    })
+}
+
+const render = () => {
+  renderLeaderboard();
+  plotChat();
+}
+
+const getOptions = () => {
+  const placeInput = document.querySelector(selectors.placeInput);
+  const placeOption = placeInput.options[placeInput.selectedIndex];
+  return {
+    place: placeOption ? placeOption.value : defaultSelectedPlace,
+    log: document.querySelector(selectors.logOptionInput).checked,
+    dydx: document.querySelector(selectors.dydxOptionInput).checked
+  }
+}
+</script>
+ -->
+<script src="{{ url_for('static', filename="js/utils.js")}}?dev=0"></script>
+<script src="{{ url_for('static', filename="js/chart.js")}}"></script>
+<script src="{{ url_for('static', filename="js/handlers.js")}}"></script>
+<script src="{{ url_for('static', filename="js/rendering.js")}}"></script>
+<script src="{{ url_for('static', filename="js/app.js")}}"></script>
 </body>
 <!-- Body End -->
 </html>

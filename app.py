@@ -1,13 +1,13 @@
 import os
-from flask import Flask,render_template,request, url_for, redirect, abort, send_file
+from flask import Flask,render_template,request, url_for, redirect, abort, send_file,send_from_directory
 from flask_bootstrap import Bootstrap
 import pandas as pd
 import json
 import os
 
-app = Flask(__name__)
+# os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 
-os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+app = Flask(__name__)
 
 Bootstrap(app)
 
@@ -69,10 +69,16 @@ def update_leaderboard():
     return "updated successfully"
 
 
-@app.route("/get/files", defaults={'req_path': ''})
-def serve_files(req_path):
-    files = get_files(req_path)
-    return json.dumps({'files':files}, indent=2)
+# @app.route("/get/files", defaults={'req_path': ''})
+# def serve_files(req_path):
+#     files = get_files(req_path)
+#     return json.dumps({'files':files}, indent=2)
+
+@app.route('/get_data/<path:filename>')
+def download_file(filename):
+    print("HIT",filename)
+    return send_from_directory("/app/",
+                               filename, as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=80)
