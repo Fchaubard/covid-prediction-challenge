@@ -16,7 +16,7 @@ RUN mkdir -p /usr/local/gcloud \
 RUN rm /tmp/google-cloud-sdk.tar.gz 
 
 # Install production dependencies.
-RUN pip install Flask gunicorn flask-bootstrap pandas gsutil
+RUN pip install Flask gunicorn flask-bootstrap pandas gsutil werkzeug
 
 FROM build-stage1 as build-stage2
 

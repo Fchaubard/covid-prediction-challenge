@@ -163,6 +163,8 @@ def main():
 
     with open(os.path.join(BASE_DATA_REPO,'leaderboard.json'), 'w') as json_file:
         json.dump(final_dict, json_file, indent=4)
+    
+    df_truth.to_csv(os.path.join(BASE_DATA_REPO,'all_data.csv'))
 
     print("Updated leaderboard!")
 

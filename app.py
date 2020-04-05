@@ -1,20 +1,103 @@
 import os
-from flask import Flask,render_template,request, url_for, redirect, abort, send_file,send_from_directory
+from flask import Flask,Response,render_template,request, url_for, redirect, abort, send_file,send_from_directory
 from flask_bootstrap import Bootstrap
 import pandas as pd
 import json
 import os
+from werkzeug.utils import secure_filename
+from datetime import datetime
+import random
+import string
 
+#----- for uploading
+UPLOAD_FOLDER = '/app/data/'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.system("mkdir "+UPLOAD_FOLDER) 
+ALLOWED_EXTENSIONS = set(['txt', 'csv'])
+#-----
+
+
+#----- setup
 # os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
-
 app = Flask(__name__)
-
 Bootstrap(app)
+#-----
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/submit_form', methods=[ 'GET', 'POST'])
+def submit_form():
+    print("submit_form ")
+    print(request.form)
+    print(request.files)
+    print(request)
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            print('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            print('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print("filename",filename)
+
+            now = datetime.now()
+            form_data = request.form.to_dict(flat=False)
+            email = None
+            if "email" in form_data:
+                email = form_data["email"]
+                print(email)
+            source = None
+            if "source" in form_data:
+                source = form_data["source"]
+                print(source)
+            # grab the data 
+            meta_dict = { 
+                          "submitted_at_datetime": str(now),
+                          "submission_name": form_data['email'][0],
+                          "source": form_data['source'][0],
+                        }
+
+            print("meta_dict" , meta_dict)
+            folder_name =  str(now.date()).replace("/","_") +"_"+ randomString(10)
+            print("folder_name",folder_name)
+            os.system("mkdir "+UPLOAD_FOLDER +folder_name)
+            file_path = UPLOAD_FOLDER + folder_name +"/"+ filename
+            file.save(file_path)
+            with open(UPLOAD_FOLDER + folder_name +"/"+ "metadata.json", 'w') as json_file:
+                json.dump(meta_dict, json_file, indent=4)
+
+            # TODO: validate the csv file better than this!
+            try:
+                df = pd.read_csv(file_path)
+            except Exception as e:
+                print("wrong format!")
+                return 'Wrong csv format. please see example predictions.csv file'
+                os.system("rm -rf "+UPLOAD_FOLDER +folder_name)
+            # TODO: load the data to gcp?
+
+            print("DONE with file_path",file_path)
+            return "OK"
+        else:
+            print("bad input", file.filename)
+            return "Not a valid filetype or just bad input"
 
 
 def get_files(req_path):
 
-    BASE_DIR = '/app/data/csse_covid_19_data/csse_covid_19_daily_reports/'
+    BASE_DIR = '/app/data/covid_truth/jhu/csse_covid_19_data/csse_covid_19_daily_reports/'
 
     # Joining the base and the requested path
     abs_path = os.path.join(BASE_DIR, req_path)
