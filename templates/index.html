@@ -189,8 +189,9 @@
 
 
 <div class="mt-4 container-fluid">
-<h1>COVID-19 Prediction Challenge TEST</h1>
+<h1>COVID-19 Prediction Challenge</h1>
 <div class="col-lg-auto col-lg-auto col-6-auto">
+<h1>Why this initiative?</h1>
 Right now, it is extremely difficult to know the difference between outlandish, modest, politically motivated, financially motivated, plain lazy, or useless predictions on the effects of COVID-19 on the planet. There are predictions saying that it will infect 40% of the world, 70% of the world, and some play it really safe and say <a href="https://thehill.com/changing-america/well-being/prevention-cures/482794-officials-say-the-cdc-is-preparing-for"> 40-70% of the world </a>. The first 2 are wildly different but specific enough to be useful, the last is so broad it is not useful, this imputes a variance of 2.3 billion people?! We can not be more precise than that? Lets see..<br/><br/>
 
 Other forecasts report DRAMATICALLY less severe outcomes, including <a href="https://www.latimes.com/science/story/2020-03-22/coronavirus-outbreak-nobel-laureate?fbclid=IwAR3ztFYp7WVi2py5NYv8vwHRg6lMx6j5cfCsaQMRmbuAFCUBuULwQhnXHsk">this nobel laureate</a>. <br/><br/>
@@ -203,8 +204,9 @@ As an AI worker, there is only so much that I can do to help this crisis. I am n
 <br/><br/>
 <ul>
 <li>First, we will be able to react and change our lives conditioned upon this information. </li>
-<li>Second, we will be able to trust a prediction and avoid overstatements/overreactions and understatements/underreactions of what will happen. </li>
-<li>Third, perhaps government officials, health workers, etc will be able to use the community's models to triage and rank sort key areas and people that need resources, attention, and to be quarantined first. </li>
+<li>Second, only via this method (done here or otherwise) will we be able to trust a prediction, since we know it has scored well before without update, and that allows us to avoid overstatements/overreactions and understatements/underreactions of what will happen. </li>
+<li>Third, perhaps government officials, health workers, etc will be able to use the community's models to triage key areas that need resources, attention, and to be quarantined first over others. </li>
+<li>Fourth, perhaps government officials, health workers, etc will be able to use the community's models to triage key areas that need resources, attention, and to be quarantined first over others. </li>
 <li>Last, and probably least, there is no downside / risk to this. Even if the above benefits do not happen, doing nothing feels worse than doing something that may or may not serve some use to the world, so via pascal's wager, lets contribute and lets use AI / datascience to help bring clarity to the complexity like we know how! </li>
 </ul>
 Predicting deaths and number of sick people is an unfortunate reality, but it must be done. These are real people with real life and real families not data points on a plot. But for the world to know how to react they must TRUST the predictions of the future, and right now in the post fact era people are too skeptical of sensationalism to sell ads, politicians spinning things to overstate how great a job they are doing, fake news published by foreign entities, etc. We need predictions from experts controlled for any potential bias, pitted against each other on a nowcasting challenge, where each person's models have been forcibly submitted weeks/months in advance, so you can clearly see which projections are worth their salt. This project seeks to fill this gap, by offering a framework for us to decipher how much better one prediction is from the other.
@@ -215,13 +217,39 @@ For those of you like me who want to help this cause with their skill set please
 In science, it is control and careful analysis that allow us to know anything with any amount of certainty. That is what this project offers. 
 
 The way we will do this is the following:
-1. Every night the world health organization and many other health organizations publish their data online. John Hopkins University scraped this data and made it available by their APIs. 
+<ol>
+<li>Every night the world health organization and many other health organizations publish their data online. John Hopkins University scraped this data and made it available by their APIs. 
 2. We will pull that data every night and measure the accuracy of all the submissions against that day and the previous days. 
-3. In order to prevent an unfair advantage of the natural autoregressive properties of the dependent variables, we do not score the first week of any submission and certainly not days before the submission date. Thus, we will not calculate and you will not see your scores until a week after the submission date. Thereafter, you will see your scores update at 2am every night.
-4. We will rank and publish the full report of the top 10 submissions that will change daily.
- <h1 id="getting_started">Getting started</h1>
+</li><li>
+In order to prevent an unfair advantage of the natural autoregressive properties of the dependent variables, we do not score the first week of any submission and certainly not days before the submission date. Thus, we will not calculate and you will not see your scores until a week after the submission date. Thereafter, you will see your scores update at 2am every night.
+</li><li>
+We will rank and publish the full report of the top 10 submissions that will change daily.
+</li>
+</ol>
+
+<h3> Submitting a predictions.csv: </h3>
+<ol>
+<li>Please look at <a href="./data/all_data.csv"> all_data.csv (populated nightly)</a> for the full truth file we will use to match columns and rows to.</li>
+<li> The dates must be in YYYY-MM-DD format and be in order. </li>
+<li> The countries, states, and counties should all be titled the same as the <a href="./data/all_data.csv"> all_data.csv</a> file as discussed above.</li>
+<li> Please title your submission file predictions.csv.</li>
+<li> Please include your source code so others can leverage your experience.</li>
+<li>***"Georgia" could mean the country or the state. We could have used country codes, etc, but we wanted to make submitting easy, so just use "Georgia_State" to refer to the state and "Georgia" for the country. This is the only change we make to the raw data pulled from NYT and JHU before scoring.</li>
+</ol>
+
+<h3> What is this doing that is not being done on Kaggle? </h3>
+As mentioned, there are 2 Kaggle competitions for this. The reasons (listed below) prompted us to launch this project to be disparate from the Kaggle format:
+<ol>
+<li> This is a rolling evaluation vs. a strict start / end date which allows constant submitting throughout the crisis vs. a "date" when the competition stops. All people should be able to submit all the time to allow for as many predictions as possible with maximum amount of information. As priors change, all submitters can easily update the predictions and that can be used to update the public on the implications of that domain shift quickly.</li>
+<li> The point of predicting how long this is going to last, how many people will die, in each country, state and county, etc, is NOT to win a competition, but to inform and warn the public as quickly as possible to act accordingly. The results of the predictions in Kaggle are remarkably useless. There is not interactive chart to go through each, especially the good ones, and use the prediction to make decisions. If the prediction does not change someone's behavior, it is useless. </li>
+<li> The predictions must be comprehensive. All predictions on the web should be compared to ensure the best one is easily shown. They should include predictions from medical journals, the CDC, the WHO, and the AI community. Kaggle is not acitvely scraping predictions off the web to add to the page, we are.</li>
+<li> People care most about what is going to happen and when in their local community. The predictions should therefore be against all local municipalities as well. Country, State, Counties, etc. The Kaggle competition is evaluating on a strict subset of this.</li>
+</ol>
+
+
+<h1 id="getting_started">Getting started</h1>
 Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
-A predictions.csv must initially include the following columns: date (YYYY/MM/DD) starting a week after submission date (all previous dates/rows will be ignored anyway), # of people infected globally, and death rate globally. Then later if people are using this, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
+A predictions.csv must initially include the following columns: date (YYYY-MM-DD) starting a week after submission date (all previous dates/rows will be ignored anyway), # of people infected globally, and death rate globally. Then later if people are using this, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
 
 In the submit prediction form, you can submit the csv, name of submitter, and optionally add a github link / ipython nb. 
 

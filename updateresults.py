@@ -12,6 +12,7 @@ import os
 BASE_DATA_REPO = "/app/data/"
 
 
+
 def main():
     # 1. first open JHU and NYT to produce "Truth" key and use JHU and NYT to produce "Truth" matrix
     # 2. Then forloop over predictions to measure "Truth" matrix to prediction matrix
@@ -88,7 +89,6 @@ def main():
 
     df_jhu=df_country_level.copy()
     df_jhu.index.name = "Place"
-    # df_jhu
 
     # ---
     # NYT states to canonical
@@ -98,6 +98,7 @@ def main():
     df_nyt_states = df_nyt_states.pivot_table(index="state", columns="Date")
     df_nyt_states.columns = df_nyt_states.columns.droplevel(level=0)
     df_nyt_states.index.name = "Place"
+    df_nyt_states = df_nyt_states.rename(index={'Georgia': 'Georgia_State'})
 
     #---
     # NYT county to canonical
@@ -106,7 +107,6 @@ def main():
     df_nyt_counties = df_nyt_counties.drop(columns=["county","state","fips","cases"])
     df_nyt_counties = df_nyt_counties.pivot_table(index="Place", columns="Date")
     df_nyt_counties.columns = df_nyt_counties.columns.droplevel(level=0)
-    df_nyt_counties
     #---
 
     df_truth = pd.concat([df_nyt_states, df_nyt_counties,df_jhu], axis=0,join="inner").sort_index()
@@ -116,6 +116,7 @@ def main():
         final_dict["Truth"][row.name] = list(row)
     final_dict["Truth"]["Dates"] = list(df_truth.columns)
 
+
     # 2. Then forloop over predictions to measure "Truth" matrix to prediction matrix
 
     PREDICTIONS_ROOT_FOLDER = os.path.join(BASE_DATA_REPO, "google_storage_data/predictions/")
@@ -124,37 +125,41 @@ def main():
     submission_df = None
     print("Starting update at:",str(datetime.now()),PREDICTIONS_ROOT_FOLDER)
     for f in glob(PREDICTIONS_ROOT_FOLDER+"/*"):
-        print("Calculating results for:",str(datetime.now()),f)
-        
-        meta_file = os.path.join(f,"metadata.json")
-        meta_dict = json.load(open(meta_file))
-        submission_id = f.split("/")[-1]
-        final_scores[submission_id] = meta_dict
-        
+        try:
+            print("Calculating results for:",str(datetime.now()),f)
+            
+            meta_file = os.path.join(f,"metadata.json")
+            meta_dict = json.load(open(meta_file))
+            submission_id = f.split("/")[-1]
+            final_scores[submission_id] = meta_dict
+            
 
-        submission_datetime = datetime.strptime(meta_dict['submitted_at_datetime'], '%Y-%m-%d %H:%M:%S.%f')
-        submission_valid_beginning = submission_datetime.date()+timedelta(days=7)
-        submission_file = os.path.join(f,"predictions.csv")
-        
-        submission_df = pd.read_csv(submission_file)
-        submission_df = submission_df.set_index("Place")
+            submission_datetime = datetime.strptime(meta_dict['submitted_at_datetime'], '%Y-%m-%d %H:%M:%S.%f')
+            submission_valid_beginning = submission_datetime.date()+timedelta(days=7)
+            submission_file = os.path.join(f,"predictions.csv")
+            
+            submission_df = pd.read_csv(submission_file)
+            submission_df = submission_df.set_index("Place")
 
-    #     submission_df = submission_df.set_index("Place").sort_index()
-    #     submission_df = submission_df.reset_index().groupby(['Place','Date'])['Deaths'].aggregate('first').unstack()
-        
-    #     # remove dates from columns before 7 days after submission and anything after today
-        most_current_date = datetime.strptime(df_truth.columns[-1], '%Y-%m-%d').date()
-        valid_columns = [c for c in submission_df.columns[1:] if datetime.strptime(c, '%Y-%m-%d').date()>=submission_valid_beginning and datetime.strptime(c, '%Y-%m-%d').date()<=most_current_date] 
-        valid_rows = set(submission_df.index)&set(df_truth.index)
-        print("submission: we can start evaluating at "+str(submission_valid_beginning) + " and will end at " + str(most_current_date) + " with valid countries "+str(len(valid_rows)))
-        
-        truth = df_truth.loc[valid_rows,valid_columns].sort_index()
-        pred = submission_df.loc[valid_rows,valid_columns].sort_index()
-        print(truth.shape,pred.shape)
-        residual = (truth-pred).abs()
-        scores = residual.sum(axis=1)/len(valid_columns)
-        final_scores[submission_id]["scores"] = scores.to_dict()
-        final_scores[submission_id]["days_scored"] = len(valid_columns)
+        #     submission_df = submission_df.set_index("Place").sort_index()
+        #     submission_df = submission_df.reset_index().groupby(['Place','Date'])['Deaths'].aggregate('first').unstack()
+            
+        #     # remove dates from columns before 7 days after submission and anything after today
+            most_current_date = datetime.strptime(df_truth.columns[-1], '%Y-%m-%d').date()
+            valid_columns = set([c for c in submission_df.columns[1:] if datetime.strptime(c, '%Y-%m-%d').date()>=submission_valid_beginning and datetime.strptime(c, '%Y-%m-%d').date()<=most_current_date])
+            valid_rows = set(submission_df.index)&set(df_truth.index)
+            print("submission: we can start evaluating at "+str(submission_valid_beginning) + " and will end at " + str(most_current_date) + " with valid countries "+str(len(valid_rows)) + "with valid dates "+str(len(valid_columns)))
+            
+            truth = df_truth.loc[valid_rows,valid_columns].sort_index()
+            pred = submission_df.loc[valid_rows,valid_columns].sort_index()
+            print(truth.shape,pred.shape)
+            residual = (truth-pred).abs()
+            scores = residual.sum(axis=1)/len(valid_columns)
+            final_scores[submission_id]["scores"] = scores.to_dict()
+            final_scores[submission_id]["days_scored"] = len(valid_columns)
+            final_scores[submission_id]["dates_scored"] = list(valid_columns)
+        except Exception as e:
+            print("ERROR ",f , e)
 
     final_dict["Predictions"] = final_scores
 

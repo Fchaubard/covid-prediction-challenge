@@ -18,7 +18,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 
 
 #----- setup
-# os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 app = Flask(__name__)
 Bootstrap(app)
 #-----
@@ -40,15 +40,17 @@ def submit_form():
     print(request.files)
     print(request)
     if request.method == 'POST':
+
         if 'file' not in request.files:
             print('No file part')
-            return redirect(request.url)
+            return 'No file selected'
+
         file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
+
         if file.filename == '':
             print('No selected file')
-            return redirect(request.url)
+            return 'No file selected'
+            
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             print("filename",filename)
