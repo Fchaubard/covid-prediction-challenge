@@ -110,7 +110,8 @@ def main():
     #---
 
     df_truth = pd.concat([df_nyt_states, df_nyt_counties,df_jhu], axis=0,join="inner").sort_index()
-
+    df_truth = df_truth.fillna(0)
+    
     final_dict["Truth"] = {}
     for index, row in df_truth.iterrows():
         final_dict["Truth"][row.name] = list(row)
