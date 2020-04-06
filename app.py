@@ -174,7 +174,7 @@ def see_predictions():
 
 @app.route('/get/leaderboard')
 def get_leaderboard():
-    with open('./app/data/leaderboard.json') as f:
+    with open('/app/data/leaderboard.json') as f:
         data = json.load(f)
     # temp_data = json.dumps(data, indent=2)
     # regex = re.compile(r'\bnan\b',flags=re.IGNORECASE)
