@@ -9,6 +9,7 @@ from datetime import datetime
 import random
 import string
 from glob import glob
+# import re
 
 #----- setup
 os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
@@ -132,6 +133,14 @@ def index(req_path):
     files = get_files(req_path)
     return render_template('index.html',files=files)
 
+@app.route("/submit")
+def submit():
+    return render_template('submit.html')
+
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
 @app.route('/data/<path:req_path>')
 def dir_listing(req_path):
     print('dir_listing',req_path)
@@ -161,6 +170,16 @@ def update_leaderboard():
 def see_predictions():
     d = [f for f in os.listdir(UPLOAD_FOLDER)]
     return str(len(d)) +" <br/><br/><br/><br/> "+ str(d)
+
+
+@app.route('/get/leaderboard')
+def get_leaderboard():
+    with open('./app/data/leaderboard.json') as f:
+        data = json.load(f)
+    # temp_data = json.dumps(data, indent=2)
+    # regex = re.compile(r'\bnan\b',flags=re.IGNORECASE)
+    # temp_data = re.sub(regex, "0", temp_data)
+    return json.dumps(data, indent=2)
 
 
 # @app.route("/get/files", defaults={'req_path': ''})

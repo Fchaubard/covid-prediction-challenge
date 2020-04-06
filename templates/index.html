@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <link href="  https://pagination.js.org/dist/2.0.7/pagination.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124148774-3"></script>
@@ -47,6 +48,47 @@
   align-items: center;
   justify-content: center;
 }
+
+
+.select2-selection__rendered {
+  line-height: 45px !important;
+}
+.select2-container .select2-selection--single {
+  height: 45px !important;
+}
+.select2-selection__arrow {
+  height: 45px !important;
+}
+.select2-selection__rendered {font-weight: bold;
+  text-align: center;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+.select2-container--default .select2-selection--single {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 5px 5px 0px 0px;
+
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+  border-color: #888 transparent transparent transparent;
+  border-style: solid;
+  border-width: 8px 8px 0 8px;
+  height: 0;
+  left: 50%;
+  margin-left: -14px;
+  margin-top: -3px;
+  position: absolute;
+  top: 50%;
+  width: 0;
+}
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+  border-color: transparent transparent #888 transparent;
+  border-width: 0 8px 8px 8px;
+}
+
   </style>
 </head>
 
@@ -62,19 +104,13 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="/">Predictions</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#how_this_works">How this Works</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#getting_started">Getting Started</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#submissions">Submissions</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#leaderboard">Leaderboards</a>
+        <a class="nav-link" href="/submit">Submit a Prediction</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
   </div>
@@ -84,34 +120,7 @@
 
 <!-- Body -->
 <body>
-<!--   <div class="container">
-    <nav class="navbar navbar-light bg-light mb-3">
-      <div class="d-flex align-items-center">
-        <div class="input-group mr-5">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="place">Place</label>
-          </div>
-          <select class="custom-select" id="place">
-          </select>
-        </div>
-        <div class="custom-control custom-checkbox mr-5">
-          <input type="checkbox" class="custom-control-input" id="logOption">
-          <label class="custom-control-label" for="logOption">Log</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="dydxOption">
-          <label class="custom-control-label" for="dydxOption">dy/dx</label>
-        </div>
-      </div>
-    </nav>
-    <div class="row">
-      <div class="col-12 col-md-4">
-        <h6>Leaderboard</h6>
-        <div class="list-group leaderboard"></div>
-      </div>
-      <div class="col-12 col-md-8" id="chart" height="500"></div>
-    </div>
-  </div> -->
+
 
 <!-- Leaderboard Section -->
 
@@ -119,38 +128,23 @@
   <div class="col-sm-12">
     <div class="card">
       <div class="header">
-        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">COVID-19 Prediction Challenge Leaderboard</h4>
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">COVID-19 Prediction Leaderboard</h4>
       </div>
       <div class="card-body">
         <div class="row">
           <div class="col-sm-6">
-            <table class="table">
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">LinkedIn</th>
-                  <th scope="col">Github</th>
-                  <th scope="col">Score</th>
-                </tr>
-              </thead>
-              <tbody id="leaderboard_tbody">
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Francois Chaubard</td>
-                  <td></td>
-                  <td><a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">Code</a></td>
-                  <td>864.6 RMSE</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Tony Conti</td>
-                  <td></td>
-                  <td><a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">Code</a></td>
-                  <td>4001.2 RMSE</td>
-                </tr>
-              </tbody>
-            </table>  
+              <div class="col-sm-12" id='leaderboard'>
+                <select style="width:100%" class="region-picker" name="region"></select>
+            <!-- <input type="text" class="fuzzy-search w-100" placeholder="Search..." /> -->
+            <div class="d-flex justify-content-between align-items-center" style="width:100%;padding: 10px; background-color: #5C3B6F; color:white">
+              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SUBMISSION NAME</p>
+              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SUBMISSION LINK</p>
+              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">DAYS SCORED</p>
+              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SCORE</p>
+          </div>
+            <ul class="list-group list" id='' style="cursor:pointer; padding-top:0px"></ul>
+            <ul class="pagination"></ul>
+          </div>
           </div>
           <div class="col-sm-6">
             <div id="leaderboard-plot" style="width:100%"></div>
@@ -162,273 +156,170 @@
 </section>
 <!-- Leaderboard Section End-->
 
-<!-- 
-<section class="mt-4">
-  <div class="col-sm-6"  id='fileList' >
-    <div class="card">
-      <div class="header">
-        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">Global COVID-19 Data (Infections, Recoveries, Deaths)</h4>
-      </div>
-      <div class="card-body">
-        <p>All truth data is accessible and is updated nightly on a cron at 2am. This is what will be used as truth.</p>
-        <div class="row column justify-content-center align-items-center">
-          <div class="col-sm-12">
-            <input type="text" class="fuzzy-search w-100" placeholder="Search..." />
-            <div class="d-flex justify-content-between align-items-center" style="width:100%;padding: 10px; background-color: #5C3B6F; color:white">
-              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:50%">DATE</p>
-              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:50%">LINK</p>
-          </div>
-            <ul class="list-group list" id='' style="cursor:pointer; padding-top:0px"></ul>
-            <ul class="pagination"></ul>
-          </div>
-        </div>      
-      </div>
-    </div>
-  </div>
-</section> -->
-
-
-<div class="mt-4 container-fluid">
-<h1>COVID-19 Prediction Challenge</h1>
-<div class="col-lg-auto col-lg-auto col-6-auto">
-<h1>Why this initiative?</h1>
-Right now, it is extremely difficult to know the difference between outlandish, modest, politically motivated, financially motivated, plain lazy, or useless predictions on the effects of COVID-19 on the planet. There are predictions saying that it will infect 40% of the world, 70% of the world, and some play it really safe and say <a href="https://thehill.com/changing-america/well-being/prevention-cures/482794-officials-say-the-cdc-is-preparing-for"> 40-70% of the world </a>. The first 2 are wildly different but specific enough to be useful, the last is so broad it is not useful, this imputes a variance of 2.3 billion people?! We can not be more precise than that? Lets see..<br/><br/>
-
-Other forecasts report DRAMATICALLY less severe outcomes, including <a href="https://www.latimes.com/science/story/2020-03-22/coronavirus-outbreak-nobel-laureate?fbclid=IwAR3ztFYp7WVi2py5NYv8vwHRg6lMx6j5cfCsaQMRmbuAFCUBuULwQhnXHsk">this nobel laureate</a>. <br/><br/>
-
-They and many, many others are reporting forecasts. Some may be right, some may be wrong, some, as <a href="https://www.cnn.com/2020/03/22/world/doomsday-prophets-coronavirus-blake/index.html"> CNN reports </a>, are simply dangerous, some are backed with clear data and scientific rigor (i.e.<a href="https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf"> here </a> is the article that convinced Trump to begin suppression, <a href="https://covidactnow.org/"> here is my personal favorite right now</a>, and <a href='https://github.com/daveselinger/covid-19-hackathon'>here</a>, <a href='https://github.com/coronafighter/coronaSEIR'>here</a>, <a href='https://midasnetwork.us/covid-19/'>here</a> , and <a href='https://github.com/HopkinsIDD/ncov_incubation'>here</a> are many others), but who is right? They all made many assumptions as all predictions must, they modeled it one way or another, some will be more right than others. So who to listen to given the wild variance in predicted outcomes?
-<br/><br/>
-The world needs accurate COVID-19 infection/death models so that people can make informed decisions about how to react to the new realities around them. If you knew with 80% probability your grandmother was going to die in June, 2020, would you change something about your life? Would you tell her with confidence to do something different? Or if you knew that with 0.3% probability that she would die in June 2020, would that change your answer? If there is a difference, then that proves this initiative's worth. 
-<br/><br/>
-As an AI worker, there is only so much that I can do to help this crisis. I am not a pathologist asdf , I am not an epidemiologist, I am not a nurse, and I’m not a doctor. I know how to take large amounts of data, train models that will be robust enough to predict the future with some confidence interval based on a lot of best practices in Machine Learning. A useful thing I may be able to do is to provide a prediction that approaches the Shannon Bound for what is going to happen, how many people will die, when, where, and who. While this is horrible to consider, this is very useful for a number of reasons in my point of view. 
-<br/><br/>
-<ul>
-<li>First, we will be able to react and change our lives conditioned upon this information. </li>
-<li>Second, only via this method (done here or otherwise) will we be able to trust a prediction, since we know it has scored well before without update, and that allows us to avoid overstatements/overreactions and understatements/underreactions of what will happen. </li>
-<li>Third, perhaps government officials, health workers, etc will be able to use the community's models to triage key areas that need resources, attention, and to be quarantined first over others. </li>
-<li>Fourth, perhaps government officials, health workers, etc will be able to use the community's models to triage key areas that need resources, attention, and to be quarantined first over others. </li>
-<li>Last, and probably least, there is no downside / risk to this. Even if the above benefits do not happen, doing nothing feels worse than doing something that may or may not serve some use to the world, so via pascal's wager, lets contribute and lets use AI / datascience to help bring clarity to the complexity like we know how! </li>
-</ul>
-Predicting deaths and number of sick people is an unfortunate reality, but it must be done. These are real people with real life and real families not data points on a plot. But for the world to know how to react they must TRUST the predictions of the future, and right now in the post fact era people are too skeptical of sensationalism to sell ads, politicians spinning things to overstate how great a job they are doing, fake news published by foreign entities, etc. We need predictions from experts controlled for any potential bias, pitted against each other on a nowcasting challenge, where each person's models have been forcibly submitted weeks/months in advance, so you can clearly see which projections are worth their salt. This project seeks to fill this gap, by offering a framework for us to decipher how much better one prediction is from the other.
-
-For those of you like me who want to help this cause with their skill set please contribute a prediction. 
-
-<h1 id="how_this_works">How this works</h1>
-In science, it is control and careful analysis that allow us to know anything with any amount of certainty. That is what this project offers. 
-
-The way we will do this is the following:
-<ol>
-<li>Every night the world health organization and many other health organizations publish their data online. John Hopkins University scraped this data and made it available by their APIs. 
-2. We will pull that data every night and measure the accuracy of all the submissions against that day and the previous days. 
-</li><li>
-In order to prevent an unfair advantage of the natural autoregressive properties of the dependent variables, we do not score the first week of any submission and certainly not days before the submission date. Thus, we will not calculate and you will not see your scores until a week after the submission date. Thereafter, you will see your scores update at 2am every night.
-</li><li>
-We will rank and publish the full report of the top 10 submissions that will change daily.
-</li>
-</ol>
-
-<h3> Submitting a predictions.csv: </h3>
-<ol>
-<li>Please look at <a href="./data/all_data.csv"> all_data.csv (populated nightly)</a> for the full truth file we will use to match columns and rows to.</li>
-<li> The dates must be in YYYY-MM-DD format and be in order. </li>
-<li> The countries, states, and counties should all be titled the same as the <a href="./data/all_data.csv"> all_data.csv</a> file as discussed above.</li>
-<li> Please title your submission file predictions.csv.</li>
-<li> Please include your source code so others can leverage your experience.</li>
-<li>***"Georgia" could mean the country or the state. We could have used country codes, etc, but we wanted to make submitting easy, so just use "Georgia_State" to refer to the state and "Georgia" for the country. This is the only change we make to the raw data pulled from NYT and JHU before scoring.</li>
-</ol>
-
-<h3> What is this doing that is not being done on Kaggle? </h3>
-As mentioned, there are 2 Kaggle competitions for this. The reasons (listed below) prompted us to launch this project to be disparate from the Kaggle format:
-<ol>
-<li> This is a rolling evaluation vs. a strict start / end date which allows constant submitting throughout the crisis vs. a "date" when the competition stops. All people should be able to submit all the time to allow for as many predictions as possible with maximum amount of information. As priors change, all submitters can easily update the predictions and that can be used to update the public on the implications of that domain shift quickly.</li>
-<li> The point of predicting how long this is going to last, how many people will die, in each country, state and county, etc, is NOT to win a competition, but to inform and warn the public as quickly as possible to act accordingly. The results of the predictions in Kaggle are remarkably useless. There is not interactive chart to go through each, especially the good ones, and use the prediction to make decisions. If the prediction does not change someone's behavior, it is useless. </li>
-<li> The predictions must be comprehensive. All predictions on the web should be compared to ensure the best one is easily shown. They should include predictions from medical journals, the CDC, the WHO, and the AI community. Kaggle is not acitvely scraping predictions off the web to add to the page, we are.</li>
-<li> People care most about what is going to happen and when in their local community. The predictions should therefore be against all local municipalities as well. Country, State, Counties, etc. The Kaggle competition is evaluating on a strict subset of this.</li>
-</ol>
-
-
-<h1 id="getting_started">Getting started</h1>
-Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
-A predictions.csv must initially include the following columns: date (YYYY-MM-DD) starting a week after submission date (all previous dates/rows will be ignored anyway), # of people infected globally, and death rate globally. Then later if people are using this, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
-
-In the submit prediction form, you can submit the csv, name of submitter, and optionally add a github link / ipython nb. 
-
-<h1 id="submissions">Submissions</h1>
-
-<!-- TODO: PREVENT DOUBLE CLICKS! -->
-
-<!-- <form enctype="multipart/form-data" method="post" action="{{ url_for('submit_form') }}" name="form_submit"> -->
-<div id="formdiv">
-<form enctype="multipart/form-data" method="post" name="form_submit"> 
-  <div class="form-group"> <!-- name/email -->
-    <label for="email">Email address</label>
-    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
-  </div>
-
-  <div class="form-group"> <!-- source -->
-    <label for="source">Source Code / Repo / Website / etc</label>
-    <input class="form-control" name="source" id="source" placeholder="https://github.com/..." required>
-  </div>
-  <div class="form-group"> <!-- predictions.csv -->
-    <label for="file">Example file input</label>
-    <input type="file" class="form-control-file" id="file" name="file" required>
-  </div>
-  <button type="submit" id="submitt" class="btn btn-primary">Submit</button>
-</form>
-<div id="failed_submit">
-</div>
-</div>
-
-<script>
-  var form = document.forms.namedItem("form_submit");
-  form.addEventListener('submit', function(ev) {
-
-      var oOutput = document.querySelector("formdiv"),
-          oData = new FormData(form);
-
-      var oReq = new XMLHttpRequest();
-      oReq.open("POST", "{{url_for('submit_form')}}", true);
-      oReq.onload = function(oEvent) {
-        console.log("here",oReq.response)
-        console.log("here",oReq.responseText)
-        if (oReq.status == 200) {
-          if (oReq.responseText=="OK"){
-            document.getElementById("formdiv").innerHTML = "Success! Thank you for contributing to the project! Your submission will begin posting results in 7 days."
-          } else {
-            document.getElementById("failed_submit").innerHTML = "Failed! Please try again. Reason:" + oReq.responseText
-         
-          }
-        } else {
-          document.getElementById("failed_submit").innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
-        }
-      };
-
-      oReq.send(oData);
-      ev.preventDefault();
-    }, 
-    false);
-</script>
-
-
-
-
-<h1>Contributing to the Core Project</h1>
-If you would like to help on this project or you have any questions, please send a note to fchaubard [[at]] gmail.com. 
-</div>
-</div>
-
-
-
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-<script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 <script>
 
+var leaderboardList 
+
+// Function to generate plotly truth vs. predicition plot. Gets passed dates and data per day for both predictions and truth data. 
+function createPlot (truthX, truthY, predictionX, predictionY) {
+    truth = {
+    type: 'scatter',
+    x: truthX,
+    y: truthY,
+    mode: 'markers',
+    name: 'WHO Truth Data',
+    marker: {
+      color: 'rgba(156, 165, 196, 0.95)',
+      symbol: 'circle',
+      size: 16
+    }
+  };
+
+  prediction = {
+    type: 'scatter',
+    x: predictionX,
+    y: predictionY,
+    mode: 'lines',
+    name: 'Most Accurate Prediction',
+    line: {
+      color: '#5C3B6F',
+      width: 2
+    }
+  };
+
+  var layout = {
+    title: 'Global Deaths: Truth vs. Prediction',
+      responsive: true,
+      hovermode: 'closest',
+      legend: {
+        font: {
+          size: 10,
+        },
+      yanchor: 'middle',
+      xanchor: 'right',
+      },
+  };
+
+  var data = [truth, prediction];
+
+  Plotly.newPlot('leaderboard-plot', data, layout);
+  }
+
+
+
 $(document).ready(function() {
-  $.get('/get/files', function (response) {
+
+  // Get leaderboard.json and create leaderboard table, filter and graph
+  $.get('/get/leaderboard', function (response) {
+    var leaderboard = JSON.parse(response)
+    console.log(leaderboard)
+
+    // Create leaderboard table object with list.js
     var values
     var options = {
-        valueNames: ['name', 'link'],
-        item: `<li class="list-group-item" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
+        valueNames: ['name', 'link', 'score', 'days_scored', 'id'],
+        item: `<li class="list-group-item entry" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
                 <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin:0">
-                  <p class="name" style="text-align:center; margin:0; width:50%"></p>
-                <div class="link w-50 text-center"></div>
+                  <p class="name" style="text-align:center; margin:0; width:25%"></p>
+                <div class="link w-25 text-center"></div>
+                <div class="days_scored w-25 text-center"></div>
+                <div class="score w-25 text-center"></div>
+                <div class="id" style="display:none"></div>
               </div>
               </li>`,
         pagination: true,
         page: 10,
     };
+    leaderboardList = new List('leaderboard', options, values);
 
-    var fileList = new List('fileList', options, values);
-
-
-    $.each(JSON.parse(response).files, function (k, file) {
-      fileList.add({
-              name: file.slice(0,10).replace("-", "/").replace("-", "/"),
-              link: `<a style="margin:0" href="data/covid_truth/jhu/csse_covid_19_data/csse_covid_19_daily_reports/${file}">Download</a>`
+    // Add entries to leaderboard table
+    $.each(leaderboard.Predictions, function (k, prediction) {
+      var scores = JSON.stringify(prediction.scores)
+      leaderboardList.add({
+              name: prediction.submission_name,
+              link: `<a style="margin:0" href="${prediction.source}">Link</a>`,
+              id: k, 
+              score: 1, //dummy value, gets overwritten once a region is selected
+              days_scored: prediction.days_scored,
       })
     })
-    // $(".pagination").find("li").addClass("page-item")
-    // $(".pagination").find("a").addClass("page-link")
+
+    // Create region picker object
+    $.each(leaderboard.Truth, function (k, region) {
+      if (k != 'Dates'){
+        $('.region-picker').append('<option value="' + k + '">' + k +'</option>')
+      }
+    })
+    $('.region-picker').select2({});
+
+    // Set World as the default selection
+    $('.region-picker').val("World").trigger('change')
+
+ 
+   // Filter function for list. Looks at currently selected region in picker and then checks each element in list for 
+   // whether a prediction was made for the region 
+    function filterCountry () {leaderboardList.filter(function(item) {
+      var region = $('.region-picker').select2('data')[0].id
+      if (region in leaderboard.Predictions[item.values().id].scores) {
+        item.values({
+            score: parseInt(leaderboard.Predictions[item.values().id].scores[region]),
+        });
+        return true;
+      } else {
+        return false;
+      }
+      })}
+
+    filterCountry()
+
+    // Sort leaderboard by score
+    leaderboardList.sort('score', {
+          order: "desc"
+      });
+    leaderboardList.update()
+
+
+    // Generate plot from the leading entry in the list
+    function showLeadingPlot () {
+      var region = $('.region-picker').select2('data')[0].id
+      var submissionId = leaderboardList.visibleItems[0]._values.id
+      createPlot(leaderboard.Truth.Dates,
+      leaderboard.Truth[region], 
+      leaderboard.Predictions[submissionId].TimeSeries.Dates,
+      leaderboard.Predictions[submissionId].TimeSeries[region]
+      )
+    }
+    showLeadingPlot()
+
+    
+    // Run filter on region picker change
+    $('.region-picker').on('select2:select', function (e) {
+      filterCountry()
+      showLeadingPlot()
+    })
+
+  // Chnage plot when leaderboard entry is clicked
+    $('.entry').click(function() {
+      var submissionId = $(this).find('.id')[0].innerText
+      var region = $('.region-picker').select2('data')[0].id
+      createPlot(leaderboard.Truth.Dates,
+      leaderboard.Truth[region], 
+      leaderboard.Predictions[submissionId].TimeSeries.Dates,
+      leaderboard.Predictions[submissionId].TimeSeries[region]
+      )
+    })
   })
 })
 
 
-//Changing nav item to active when selected
-$(".nav-item").click(function() {
-  $(".nav-item").removeClass("active")
-  $(this).addClass("active")
-})
-
-
-//Plotly Leaderboard
-trace1 = {
-  type: 'scatter',
-  x: ['1/22/20','1/23/20','1/24/20','1/25/20','1/26/20','1/27/20','1/28/20','1/29/20','1/30/20','1/31/20','2/1/20','2/2/20','2/3/20','2/4/20','2/5/20','2/6/20','2/7/20','2/8/20','2/9/20','2/10/20','2/11/20','2/12/20','2/13/20','2/14/20','2/15/20','2/16/20','2/17/20','2/18/20','2/19/20','2/20/20','2/21/20','2/22/20','2/23/20','2/24/20','2/25/20','2/26/20','2/27/20','2/28/20','2/29/20','3/1/20','3/2/20','3/3/20','3/4/20','3/5/20','3/6/20','3/7/20','3/8/20','3/9/20','3/10/20','3/11/20','3/12/20','3/13/20','3/14/20','3/15/20','3/16/20','3/17/20','3/18/20','3/19/20','3/20/20','3/21/20','3/22/20','3/23/20','3/24/20','3/25/20','3/26/20','3/27/20','3/28/20','3/29/20'],
-  y: [17,18,26,42,56,82,131,133,171,213,259,362,426,492,564,634,719,806,906,1013,1113,1118,1371,1523,1666,1770,1868,2007,2122,2247,2251,2458,2469,2629,2708,2770,2814,2872,2941,2996,3085,3160,3254,3348,3460,3558,3802,3988,4262,4615,4720,5404,5819,6440,7126,7905,8733,9867,11299,12973,14651,16505,18625,21181,23970,27198,30652,33925],
-  mode: 'markers',
-  name: 'WHO Truth Data',
-  marker: {
-    color: 'rgba(156, 165, 196, 0.95)',
-    // line: {
-    //   color: 'rgba(156, 165, 196, 1.0)',
-    //   width: 1,
-    // },
-    symbol: 'circle',
-    size: 16
-  }
-};
-
-trace2 = {
-  type: 'scatter',
-  x: ['1/22/20','1/23/20','1/24/20','1/25/20','1/26/20','1/27/20','1/28/20','1/29/20','1/30/20','1/31/20','2/1/20','2/2/20','2/3/20','2/4/20','2/5/20','2/6/20','2/7/20','2/8/20','2/9/20','2/10/20','2/11/20','2/12/20','2/13/20','2/14/20','2/15/20','2/16/20','2/17/20','2/18/20','2/19/20','2/20/20','2/21/20','2/22/20','2/23/20','2/24/20','2/25/20','2/26/20','2/27/20','2/28/20','2/29/20','3/1/20','3/2/20','3/3/20','3/4/20','3/5/20','3/6/20','3/7/20','3/8/20','3/9/20','3/10/20','3/11/20','3/12/20','3/13/20','3/14/20','3/15/20','3/16/20','3/17/20','3/18/20','3/19/20','3/20/20','3/21/20','3/22/20','3/23/20','3/24/20','3/25/20','3/26/20','3/27/20','3/28/20','3/29/20','3/30/20','3/31/20','4/1/20','4/2/20','4/3/20','4/4/20','4/5/20','4/6/20','4/7/20','4/8/20','4/9/20','4/10/20','4/11/20','4/12/20','4/13/20','4/14/20','4/15/20','4/16/20','4/17/20','4/18/20','4/19/20','4/20/20','4/21/20','4/22/20','4/23/20','4/24/20','4/25/20','4/26/20','4/27/20','4/28/20','4/29/20','4/30/20','5/1/20','5/2/20','5/3/20','5/4/20','5/5/20','5/6/20','5/7/20','5/8/20','5/9/20','5/10/20','5/11/20','5/12/20','5/13/20','5/14/20','5/15/20','5/16/20','5/17/20','5/18/20','5/19/20','5/20/20','5/21/20','5/22/20','5/23/20','5/24/20','5/25/20','5/26/20','5/27/20','5/28/20','5/29/20','5/30/20','5/31/20','6/1/20','6/2/20','6/3/20','6/4/20','6/5/20','6/6/20','6/7/20','6/8/20','6/9/20','6/10/20','6/11/20','6/12/20','6/13/20','6/14/20','6/15/20','6/16/20','6/17/20','6/18/20','6/19/20','6/20/20','6/21/20','6/22/20','6/23/20','6/24/20','6/25/20','6/26/20','6/27/20','6/28/20','6/29/20','6/30/20','7/1/20','7/2/20','7/3/20','7/4/20','7/5/20','7/6/20','7/7/20','7/8/20','7/9/20','7/10/20','7/11/20','7/12/20','7/13/20','7/14/20','7/15/20','7/16/20','7/17/20','7/18/20','7/19/20','7/20/20','7/21/20','7/22/20','7/23/20','7/24/20','7/25/20','7/26/20','7/27/20','7/28/20','7/29/20','7/30/20','7/31/20','8/1/20','8/2/20','8/3/20','8/4/20','8/5/20','8/6/20','8/7/20','8/8/20'],
-  y: [27,30,33,37,41,46,51,57,63,70,78,87,97,107,119,133,147,164,182,202,225,250,277,308,342,380,422,469,521,579,643,715,794,882,980,1088,1209,1343,1492,1657,1841,2045,2271,2523,2802,3113,3458,3841,4266,4739,5263,5846,6494,7213,8012,8899,9884,10978,12193,13543,15041,16705,18553,20605,22883,25413,28222,31340,34802,38644,42909,47643,52897,58727,65196,72372,80333,89162,98953,109808,121840,135175,149949,166314,184434,204491,226683,251228,278363,308344,341452,377990,418284,462688,511578,565358,624456,689326,760441,838300,923413,1016307,1117513,1227563,1346979,1476263,1615886,1766276,1927798,2100743,2285311,2481591,2689549,2909008,3139638,3380948,3632273,3892781,4161473,4437191,4718639,5004402,5292973,5582784,5872240,6159754,6443780,6722850,6995597,7260786,7517326,7764293,8000928,8226644,8441022,8643803,8834875,9014259,9182097,9338630,9484185,9619158,9743996,9859185,9965240,10062686,10152056,10233881,10308680,10376960,10439207,10495887,10547442,10594290,10636822,10675405,10710379,10742062,10770745,10796698,10820169,10841387,10860560,10877878,10893516,10907633,10920372,10931867,10942236,10951587,10960019,10967621,10974474,10980651,10986218,10991234,10995753,10999825,11003494,11006798,11009775,11012456,11014871,11017046,11019004,11020768,11022356,11023787,11025075,11026234,11027279,11028219,11029066,11029828,11030514,11031132,11031689,11032190,11032641,11033047],
-  mode: 'lines',
-  name: 'Most Accurate Prediction',
-  line: {
-    color: '#5C3B6F',
-    width: 2
-  }
-};
-
-var layout = {
-	title: 'Global Deaths: Truth vs. Prediction',
-  	responsive: true,
-  	hovermode: 'closest',
-  	legend: {
-	    font: {
-	      size: 10,
-	    },
-    yanchor: 'middle',
-    xanchor: 'right',
-  	},
-};
-
-var data = [trace1,trace2];
-
-Plotly.newPlot('leaderboard-plot', data, layout);
-
-// // Leaderboard tbody
-// $(document).ready(function () {
-//     $.getJSON('./data/leaderboard.json',
-//     function (json) {
-//         var tr;
-//         for (var i in json) {
-//             tr = $('<tr/>');
-//             tr.append("<td>" + json[i].email_address + "</td>");
-//             tr.append("<td>" + json[i].github_link + "</td>");
-//             tr.append("<td>" + json[i].linkedin_link + "</td>");
-//             tr.append("<td>" + json[i].scores.World + "</td>");
-//             $('leaderboard_tbody').append(tr);
-//         }
-//     });
-// });
-
 </script>
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 
 </body>
