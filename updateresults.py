@@ -160,10 +160,10 @@ def main():
             final_scores[submission_id]["days_scored"] = len(valid_columns)
             final_scores[submission_id]["dates_scored"] = list(valid_columns)
 
-            final_scores["TimeSeries"] = {}
+            final_scores[submission_id]["TimeSeries"] = {}
             for index, row in submission_df.iterrows():
-                final_scores["TimeSeries"][row.name] = list(row)
-            final_scores["TimeSeries"]["Dates"] = list(submission_df.columns)
+                final_scores[submission_id]["TimeSeries"][row.name] = list(row)
+            final_scores[submission_id]["TimeSeries"]["Dates"] = list(submission_df.columns)
         except Exception as e:
             print("ERROR ",f , e)
 
