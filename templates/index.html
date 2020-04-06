@@ -302,6 +302,10 @@ $(document).ready(function() {
     $('.region-picker').on('select2:select', function (e) {
       filterCountry()
       showLeadingPlot()
+      leaderboardList.sort('score', {
+          order: "desc"
+      });
+     leaderboardList.update()
     })
 
   // Chnage plot when leaderboard entry is clicked
