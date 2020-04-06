@@ -168,6 +168,7 @@ var leaderboardList
 
 // Function to generate plotly truth vs. predicition plot. Gets passed dates and data per day for both predictions and truth data. 
 function createPlot (truthX, truthY, predictionX, predictionY) {
+    Plotly.purge('leaderboard-plot')
     truth = {
     type: 'scatter',
     x: truthX,
@@ -279,7 +280,7 @@ $(document).ready(function() {
 
     // Sort leaderboard by score
     leaderboardList.sort('score', {
-          order: "desc"
+          order: "asc"
       });
     leaderboardList.update()
 
@@ -302,7 +303,7 @@ $(document).ready(function() {
       filterCountry()
       showLeadingPlot()
       leaderboardList.sort('score', {
-          order: "desc"
+          order: "asc"
       });
      leaderboardList.update()
     })
