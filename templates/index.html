@@ -218,7 +218,6 @@ $(document).ready(function() {
   // Get leaderboard.json and create leaderboard table, filter and graph
   $.get('/get/leaderboard', function (response) {
     var leaderboard = JSON.parse(response)
-    console.log(leaderboard)
 
     // Create leaderboard table object with list.js
     var values
