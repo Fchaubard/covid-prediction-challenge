@@ -8,11 +8,6 @@ import pandas as pd
 from datetime import timedelta
 import os
 
-
-BASE_DATA_REPO = "/app/data/"
-
-
-
 def main():
     # 1. first open JHU and NYT to produce "Truth" key and use JHU and NYT to produce "Truth" matrix
     # 2. Then forloop over predictions to measure "Truth" matrix to prediction matrix
@@ -48,7 +43,7 @@ def main():
     #                          'place2': [v1,v2,v3...],
 
     final_dict = {}
-
+    BASE_DATA_REPO = sys.argv[1]+"/data/"
 
     # 1. first open JHU and NYT to produce "Truth" key and use JHU and NYT to produce "Truth" matrix
     JHU = os.path.join(BASE_DATA_REPO, 'covid_truth/jhu/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
@@ -141,11 +136,9 @@ def main():
             
             submission_df = pd.read_csv(submission_file)
             submission_df = submission_df.set_index("Place")
+            submission_df = submission_df.fillna(0)
 
-        #     submission_df = submission_df.set_index("Place").sort_index()
-        #     submission_df = submission_df.reset_index().groupby(['Place','Date'])['Deaths'].aggregate('first').unstack()
-            
-        #     # remove dates from columns before 7 days after submission and anything after today
+            # remove dates from columns before 7 days after submission and anything after today
             most_current_date = datetime.strptime(df_truth.columns[-1], '%Y-%m-%d').date()
             valid_columns = set([c for c in submission_df.columns[1:] if datetime.strptime(c, '%Y-%m-%d').date()>=submission_valid_beginning and datetime.strptime(c, '%Y-%m-%d').date()<=most_current_date])
             valid_rows = set(submission_df.index)&set(df_truth.index)

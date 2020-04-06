@@ -12,6 +12,7 @@ then
 else
     cd $LOCALREPO
     git pull $REPOSRC
+    cd -
 fi
 
 REPOSRC=https://github.com/nytimes/covid-19-data.git
@@ -26,6 +27,7 @@ then
 else
     cd $LOCALREPO
     git pull $REPOSRC
+    cd -
 fi
 
 
@@ -38,6 +40,6 @@ fi
 
 gsutil rsync -r gs://covid_website_data/ $GOOGLESTORAGEPATH
 
-python $BASEDIR/updateresults.py 
+python updateresults.py $BASEDIR
 
 # End
