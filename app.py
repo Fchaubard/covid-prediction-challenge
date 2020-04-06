@@ -8,20 +8,24 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import random
 import string
-
-#----- for uploading
-UPLOAD_FOLDER = '/app/data/'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.system("mkdir "+UPLOAD_FOLDER) 
-ALLOWED_EXTENSIONS = set(['txt', 'csv'])
-#-----
-
+from glob import glob
 
 #----- setup
 os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 app = Flask(__name__)
 Bootstrap(app)
 #-----
+
+
+
+#----- for uploading
+UPLOAD_FOLDER = '/app/data/google_storage_data/predictions/'
+if not os.path.exists(UPLOAD_FOLDER):
+    print("ERROR! NO UPLOAD_FOLDER: ", UPLOAD_FOLDER)
+ALLOWED_EXTENSIONS = set(['txt', 'csv'])
+#-----
+
+
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
@@ -75,7 +79,7 @@ def submit_form():
             print("meta_dict" , meta_dict)
             folder_name =  str(now.date()).replace("/","_") +"_"+ randomString(10)
             print("folder_name",folder_name)
-            os.system("mkdir "+UPLOAD_FOLDER +folder_name)
+            os.system("mkdir "+UPLOAD_FOLDER + folder_name)
             file_path = UPLOAD_FOLDER + folder_name +"/"+ filename
             file.save(file_path)
             with open(UPLOAD_FOLDER + folder_name +"/"+ "metadata.json", 'w') as json_file:
@@ -151,7 +155,12 @@ def dir_listing(req_path):
 @app.route('/update_leaderboard')
 def update_leaderboard():
     os.system("bash /app/task.sh")
-    return "updated successfully"
+    return json.dumps(json.load(open("/app/data/leaderboard.json",'r')),sort_keys=True, indent=4)
+
+@app.route('/see_predictions')
+def see_predictions():
+    d = [f for f in os.listdir(UPLOAD_FOLDER)]
+    return str(len(d)) +" <br/><br/><br/><br/> "+ str(d)
 
 
 # @app.route("/get/files", defaults={'req_path': ''})

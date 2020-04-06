@@ -111,7 +111,7 @@ def main():
 
     df_truth = pd.concat([df_nyt_states, df_nyt_counties,df_jhu], axis=0,join="inner").sort_index()
     df_truth = df_truth.fillna(0)
-    
+
     final_dict["Truth"] = {}
     for index, row in df_truth.iterrows():
         final_dict["Truth"][row.name] = list(row)
@@ -159,6 +159,11 @@ def main():
             final_scores[submission_id]["scores"] = scores.to_dict()
             final_scores[submission_id]["days_scored"] = len(valid_columns)
             final_scores[submission_id]["dates_scored"] = list(valid_columns)
+
+            final_scores["TimeSeries"] = {}
+            for index, row in submission_df.iterrows():
+                final_scores["TimeSeries"][row.name] = list(row)
+            final_scores["TimeSeries"]["Dates"] = list(submission_df.columns)
         except Exception as e:
             print("ERROR ",f , e)
 
