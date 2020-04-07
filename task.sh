@@ -38,7 +38,7 @@ then
 	mkdir $GOOGLESTORAGEPATH
 fi
 
-gsutil rsync -r gs://covid_website_data/ $GOOGLESTORAGEPATH
+gsutil -m rsync -r gs://covid_website_data/ $GOOGLESTORAGEPATH
 
 python updateresults.py $BASEDIR
 

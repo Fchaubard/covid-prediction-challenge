@@ -187,7 +187,7 @@ function createPlot (truthX, truthY, predictionX, predictionY) {
     x: predictionX,
     y: predictionY,
     mode: 'lines',
-    name: 'Most Accurate Prediction',
+    name: 'Prediction',
     line: {
       color: '#5C3B6F',
       width: 2
@@ -195,7 +195,7 @@ function createPlot (truthX, truthY, predictionX, predictionY) {
   };
 
   var layout = {
-    title: 'Global Deaths: Truth vs. Prediction',
+    title: 'Deaths: Truth vs. Prediction',
       responsive: true,
       hovermode: 'closest',
       legend: {
@@ -223,10 +223,12 @@ function showPlot (el) {
 )
 }
 
+
 $(document).ready(function() {
 
+  
   // Get leaderboard.json and create leaderboard table, filter and graph
-  $.get('/get/leaderboard', function (response) {
+  $.get('/get/leaderboard?place=World', function (response) {
     leaderboard = JSON.parse(response)
 
     // Create leaderboard table object with list.js
@@ -309,17 +311,32 @@ $(document).ready(function() {
     
     // Run filter on region picker change
     $('.region-picker').on('select2:select', function (e) {
-      filterCountry()
-      leaderboardList.update()
-      showLeadingPlot()
-      leaderboardList.sort('score', {
-          order: "asc"
-      });
-      leaderboardList.update()
 
+        var region = $('.region-picker').select2('data')[0].id
+        $.get('/get/leaderboard?place='+region, function (response) {
+          leaderboard = JSON.parse(response)
+
+          leaderboardList.clear()
+          // Add entries to leaderboard table
+          $.each(leaderboard.Predictions, function (k, prediction) {
+            var scores = JSON.stringify(prediction.scores)
+            leaderboardList.add({
+                    name: prediction.submission_name,
+                    link: `<a style="margin:0" href="${prediction.source}">Link</a>`,
+                    id: k, 
+                    score: 1, //dummy value, gets overwritten once a region is selected
+                    days_scored: prediction.days_scored,
+            })
+          })
+          filterCountry()
+          leaderboardList.update()
+          showLeadingPlot()
+          leaderboardList.sort('score', {
+              order: "asc"
+          });
+          leaderboardList.update()
+        // })
     })
-
-
   })
 })
 

@@ -111,6 +111,7 @@ def main():
     for index, row in df_truth.iterrows():
         final_dict["Truth"][row.name] = list(row)
     final_dict["Truth"]["Dates"] = list(df_truth.columns)
+    final_dict["Truth"]["World"] = list( df_truth.loc["World",:] )
 
 
     # 2. Then forloop over predictions to measure "Truth" matrix to prediction matrix

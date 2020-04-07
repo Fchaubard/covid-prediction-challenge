@@ -13,7 +13,7 @@ from glob import glob
 import copy
 
 #----- setup
-# os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 app = Flask(__name__)
 Bootstrap(app)
 #-----
@@ -208,8 +208,8 @@ def get_leaderboard():
         except Exception as e:
             print(place,e)
 
-    data = get_subset_of_lb_for_place(data, place)
-    return json.dumps(data,sort_keys=True)
+    data_smaller = get_subset_of_lb_for_place(data, place)
+    return json.dumps(data_smaller,sort_keys=True)
 
 
 # @app.route("/get/files", defaults={'req_path': ''})
