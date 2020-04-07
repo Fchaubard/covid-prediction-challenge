@@ -228,7 +228,7 @@ $(document).ready(function() {
 
   
   // Get leaderboard.json and create leaderboard table, filter and graph
-  $.get('/get/leaderboard?place=World', function (response) {
+  $.get('/get/leaderboard?place=US', function (response) {
     leaderboard = JSON.parse(response)
 
     // Create leaderboard table object with list.js
@@ -270,7 +270,7 @@ $(document).ready(function() {
     $('.region-picker').select2({});
 
     // Set World as the default selection
-    $('.region-picker').val("World").trigger('change')
+    $('.region-picker').val("US").trigger('change')
 
  
    // Filter function for list. Looks at currently selected region in picker and then checks each element in list for 
@@ -335,7 +335,7 @@ $(document).ready(function() {
               order: "asc"
           });
           leaderboardList.update()
-        // })
+        })
     })
   })
 })
