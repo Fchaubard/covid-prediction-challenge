@@ -165,10 +165,11 @@
 <script>
 
 var leaderboardList 
+var leaderboard
 
 // Function to generate plotly truth vs. predicition plot. Gets passed dates and data per day for both predictions and truth data. 
 function createPlot (truthX, truthY, predictionX, predictionY) {
-    Plotly.purge('leaderboard-plot')
+  console.log(truthX, truthY, predictionX, predictionY)
     truth = {
     type: 'scatter',
     x: truthX,
@@ -212,19 +213,31 @@ function createPlot (truthX, truthY, predictionX, predictionY) {
   Plotly.newPlot('leaderboard-plot', data, layout);
   }
 
-
+// Change plot when leaderboard entry is clicked
+function showPlot (el) {
+  console.log(el.querySelector('.id').innerText)
+  var submissionId = el.querySelector('.id').innerText
+  console.log(submissionId)
+  var region = $('.region-picker').select2('data')[0].id
+  createPlot(leaderboard.Truth.Dates,
+  leaderboard.Truth[region], 
+  leaderboard.Predictions[submissionId].TimeSeries.Dates,
+  leaderboard.Predictions[submissionId].TimeSeries[region]
+)
+}
 
 $(document).ready(function() {
 
   // Get leaderboard.json and create leaderboard table, filter and graph
   $.get('/get/leaderboard', function (response) {
-    var leaderboard = JSON.parse(response)
+    leaderboard = JSON.parse(response)
+    console.log(leaderboard)
 
     // Create leaderboard table object with list.js
     var values
     var options = {
         valueNames: ['name', 'link', 'score', 'days_scored', 'id'],
-        item: `<li class="list-group-item entry" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
+        item: `<li class="list-group-item entry" onclick="showPlot(this)" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
                 <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin:0">
                   <p class="name" style="text-align:center; margin:0; width:25%"></p>
                 <div class="link w-25 text-center"></div>
@@ -259,7 +272,7 @@ $(document).ready(function() {
     $('.region-picker').select2({});
 
     // Set World as the default selection
-    $('.region-picker').val("World").trigger('change')
+    $('.region-picker').val("Afghanistan").trigger('change')
 
  
    // Filter function for list. Looks at currently selected region in picker and then checks each element in list for 
@@ -301,23 +314,16 @@ $(document).ready(function() {
     // Run filter on region picker change
     $('.region-picker').on('select2:select', function (e) {
       filterCountry()
+      leaderboardList.update()
       showLeadingPlot()
       leaderboardList.sort('score', {
           order: "asc"
       });
-     leaderboardList.update()
+      leaderboardList.update()
+
     })
 
-  // Chnage plot when leaderboard entry is clicked
-    $('.entry').click(function() {
-      var submissionId = $(this).find('.id')[0].innerText
-      var region = $('.region-picker').select2('data')[0].id
-      createPlot(leaderboard.Truth.Dates,
-      leaderboard.Truth[region], 
-      leaderboard.Predictions[submissionId].TimeSeries.Dates,
-      leaderboard.Predictions[submissionId].TimeSeries[region]
-      )
-    })
+
   })
 })
 
