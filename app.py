@@ -9,10 +9,11 @@ from datetime import datetime
 import random
 import string
 from glob import glob
-# import re
+
+import copy
 
 #----- setup
-os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+# os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 app = Flask(__name__)
 Bootstrap(app)
 #-----
@@ -25,6 +26,29 @@ if not os.path.exists(UPLOAD_FOLDER):
     print("ERROR! NO UPLOAD_FOLDER: ", UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 #-----
+
+
+
+def get_subset_of_lb_for_place(data, place):
+    data_smaller = copy.deepcopy(data)
+
+    for place_ in data["Truth"].keys():
+        if not (place_==place or place_=="Dates"):
+            data_smaller["Truth"][place_]=[]
+
+    for submission_id in data["Predictions"].keys():
+        if place in data["Predictions"][submission_id]['TimeSeries']:
+            for place_ in data["Predictions"][submission_id]['TimeSeries'].keys():
+                if not (place_==place or place_=="Dates"):
+                    try:
+                        del data_smaller["Predictions"][submission_id]['TimeSeries'][place_]
+                    except Exception:
+                        pass
+            data_smaller["Predictions"][submission_id]["scores"] = {place:data["Predictions"][submission_id]["scores"][place]}
+        else:
+            del data_smaller["Predictions"][submission_id]
+
+    return data_smaller
 
 
 def randomString(stringLength=10):
@@ -172,14 +196,20 @@ def see_predictions():
     return str(len(d)) +" <br/><br/><br/><br/> "+ str(d)
 
 
-@app.route('/get/leaderboard')
+@app.route('/get/leaderboard', methods=[ 'GET'])
 def get_leaderboard():
     with open('/app/data/leaderboard.json') as f:
         data = json.load(f)
-    # temp_data = json.dumps(data, indent=2)
-    # regex = re.compile(r'\bnan\b',flags=re.IGNORECASE)
-    # temp_data = re.sub(regex, "0", temp_data)
-    return json.dumps(data, indent=2)
+    place = "World"
+    if request.method == 'GET':
+        try:
+            place = request.args.get('place')
+            print("GET place ", place)
+        except Exception as e:
+            print(place,e)
+
+    data = get_subset_of_lb_for_place(data, place)
+    return json.dumps(data,sort_keys=True)
 
 
 # @app.route("/get/files", defaults={'req_path': ''})
