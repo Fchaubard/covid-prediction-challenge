@@ -169,7 +169,6 @@ var leaderboard
 
 // Function to generate plotly truth vs. predicition plot. Gets passed dates and data per day for both predictions and truth data. 
 function createPlot (truthX, truthY, predictionX, predictionY) {
-  console.log(truthX, truthY, predictionX, predictionY)
     truth = {
     type: 'scatter',
     x: truthX,
@@ -215,9 +214,7 @@ function createPlot (truthX, truthY, predictionX, predictionY) {
 
 // Change plot when leaderboard entry is clicked
 function showPlot (el) {
-  console.log(el.querySelector('.id').innerText)
   var submissionId = el.querySelector('.id').innerText
-  console.log(submissionId)
   var region = $('.region-picker').select2('data')[0].id
   createPlot(leaderboard.Truth.Dates,
   leaderboard.Truth[region], 
@@ -231,7 +228,6 @@ $(document).ready(function() {
   // Get leaderboard.json and create leaderboard table, filter and graph
   $.get('/get/leaderboard', function (response) {
     leaderboard = JSON.parse(response)
-    console.log(leaderboard)
 
     // Create leaderboard table object with list.js
     var values
