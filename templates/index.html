@@ -89,9 +89,21 @@
   border-width: 0 8px 8px 8px;
 }
 
+
+.color-circle {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -134,10 +146,22 @@
 
 <!-- Body -->
 <body>
+<section class="mt-4">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">COVID-19 Prediction Collection and Analysis</h4>
+      </div>
+      <div class="card-body">
 
+        <p>The <a href="/about">mission</a> of this project is to gather the thousands forecasts made on the effects of COVID-19 and evaluate them in a controlled way to clearly decipher which are more accurate and dependable than the others. A good prediction will prove itself correct over time. We scraped thousands of them and developed our own and evaluate them against truth every night and rank them. The hope is that this will help people make informed decisions about how to react to the new realities around them, financial, business, or life decisions. You can submit a predicion <a href="/submit"> here </a> or <a href="/about">contact us!</a></p>
+
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Leaderboard Section -->
-
 <section class="mt-4">
   <div class="col-sm-12">
     <div class="card">
@@ -145,24 +169,28 @@
         <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">COVID-19 Prediction Leaderboard</h4>
       </div>
       <div class="card-body">
-        <div class="loader" id="loader" style="text-align:center; margin-bottom:0; margin:0px;" ></div>
+
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-4">
               <div class="col-sm-12" id='leaderboard'>
+
                 <select style="width:100%" class="region-picker" name="region"></select>
-            <!-- <input type="text" class="fuzzy-search w-100" placeholder="Search..." /> -->
-            <div class="d-flex justify-content-between align-items-center" style="width:100%;padding: 10px; background-color: #5C3B6F; color:white">
-              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SUBMISSION NAME</p>
-              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SUBMISSION LINK</p>
-              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">DAYS SCORED</p>
-              <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SCORE</p>
-          </div>
+                  <!-- <input type="text" class="fuzzy-search w-100" placeholder="Search..." /> -->
+                  <div class="d-flex justify-content-between align-items-center" style="width:100%;padding: 10px; background-color: #5C3B6F; color:white">
+                    <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">AUTHOR</p>
+                    <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SOURCE</p>
+                    <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">DAYS SCORED</p>
+                    <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%"> SCORE <a href="https://en.wikipedia.org/wiki/Mean_absolute_error" target="_blank">(?)</a> </p>
+                    
+                </div>
+                <div class="loader" id="loader" style="margin: auto;" >
+                </div>
             <ul class="list-group list" id='' style="cursor:pointer; padding-top:0px"></ul>
             <ul class="pagination"></ul>
+            </div>
           </div>
-          </div>
-          <div class="col-sm-6">
-            <div id="leaderboard-plot" style="width:100%"></div>
+          <div class="col-sm-7" style="width:100%;height:100%">
+            <div id="leaderboard-plot" style="width:100%;height:100%"></div>
           </div>
         </div>      
       </div>
@@ -182,62 +210,156 @@
 var leaderboardList 
 var leaderboard
 
+var region = "US" // initial
+
+
+var colors = [
+    '#1f77b4',
+    '#ff7f0e',
+    '#2ca02c',
+    '#d62728',
+    '#9467bd',
+    '#8c564b',
+    '#e377c2',
+    '#7f7f7f',
+    '#bcbd22',
+    '#17becf',
+    '#1f77b4',
+    '#ff7f0e',
+    '#2ca02c',
+    '#d62728',
+    '#9467bd',
+    '#8c564b',
+    '#e377c2',
+    '#7f7f7f',
+    '#bcbd22'
+  ];
 // Function to generate plotly truth vs. predicition plot. Gets passed dates and data per day for both predictions and truth data. 
-function createPlot (truthX, truthY, predictionX, predictionY) {
+// function createPlot (truthX, truthY, predictionX, predictionY) {
+//     truth = {
+//     type: 'scatter',
+//     x: truthX,
+//     y: truthY,
+//     mode: 'markers',
+//     name: 'WHO Truth Data',
+//     marker: {
+//       color: 'rgba(156, 165, 196, 0.95)',
+//       symbol: 'circle',
+//       size: 16
+//     }
+//   };
+
+//   prediction = {
+//     type: 'scatter',
+//     x: predictionX,
+//     y: predictionY,
+//     mode: 'lines',
+//     name: 'Prediction',
+//     line: {
+//       color: '#5C3B6F',
+//       width: 2
+//     }
+//   };
+
+//   var layout = {
+//     title: 'Deaths: Truth vs. Prediction',
+//       responsive: true,
+//       hovermode: 'closest',
+//       legend: {
+//         font: {
+//           size: 10,
+//         },
+//       yanchor: 'middle',
+//       xanchor: 'right',
+//       },
+//   };
+
+//   var data = [truth, prediction];
+
+//   Plotly.newPlot('leaderboard-plot', data, layout);
+// }
+
+function createPlot_all () {
+
+    region = $('.region-picker').select2('data')[0].id
+
     truth = {
-    type: 'scatter',
-    x: truthX,
-    y: truthY,
-    mode: 'markers',
-    name: 'WHO Truth Data',
-    marker: {
-      color: 'rgba(156, 165, 196, 0.95)',
-      symbol: 'circle',
-      size: 16
-    }
-  };
+      type: 'scatter',
+      x: leaderboard.Truth.Dates,
+      y: leaderboard.Truth[region],
+      mode: 'lines',
+      name: 'WHO Truth Data',
+      line: {
+        color: 'rgba(0, 0, 0, 1)',
+        width: 5
+        }
+    };
 
-  prediction = {
-    type: 'scatter',
-    x: predictionX,
-    y: predictionY,
-    mode: 'lines',
-    name: 'Prediction',
-    line: {
-      color: '#5C3B6F',
-      width: 2
-    }
-  };
+    var data = [truth];
+    $.each(leaderboard.Predictions, function (k, prediction) {
+      console.log(prediction.submission_name) 
+      data.push(
 
-  var layout = {
-    title: 'Deaths: Truth vs. Prediction',
-      responsive: true,
-      hovermode: 'closest',
-      legend: {
-        font: {
-          size: 10,
+                    {
+                      type: 'scatter',
+                      x: prediction.TimeSeries.Dates,
+                      y: prediction.TimeSeries[region],
+                      mode: 'lines',
+                      name: prediction.submission_name,
+                      line: {
+                        dash: 'dot',
+                        color: prediction.color,
+                        width: 4
+                      },
+                    }
+                  )
+    })
+
+    var layout = {
+        title: 'Deaths: Truth vs. Prediction',
+        responsive: true,
+        hovermode: 'compare',
+        
+        height: 700,
+        legend: {
+          x: 0,
+          y: 1,
+
+          font: {
+              size: 10,
+          },
         },
-      yanchor: 'middle',
-      xanchor: 'right',
-      },
-  };
+    };
 
-  var data = [truth, prediction];
+  
 
   Plotly.newPlot('leaderboard-plot', data, layout);
-  }
+}
 
 // Change plot when leaderboard entry is clicked
 function showPlot (el) {
-  var submissionId = el.querySelector('.id').innerText
-  var region = $('.region-picker').select2('data')[0].id
-  createPlot(leaderboard.Truth.Dates,
-  leaderboard.Truth[region], 
-  leaderboard.Predictions[submissionId].TimeSeries.Dates,
-  leaderboard.Predictions[submissionId].TimeSeries[region]
-)
+  // var submissionId = el.querySelector('.id').innerText
+  // var region = $('.region-picker').select2('data')[0].id
+  createPlot_all()
+  // createPlot(leaderboard.Truth.Dates,
+  // leaderboard.Truth[region], 
+  // leaderboard.Predictions[submissionId].TimeSeries.Dates,
+  // leaderboard.Predictions[submissionId].TimeSeries[region]
+  // )
 }
 
+
+// Change plot when leaderboard entry is clicked
+function updateLeaderboardList (k,prediction,region) {
+    var scores = JSON.stringify(prediction.scores)
+    leaderboardList.add({
+            name: prediction.submission_name,
+            link: `<a style="margin:0" href="${prediction.source}" target="_blank">Link</a>`,
+            id: k, 
+            score: prediction.scores[region], //dummy value, gets overwritten once a region is selected
+            days_scored: prediction.days_scored,
+    })
+}
 
 $(document).ready(function() {
 
@@ -246,8 +368,10 @@ $(document).ready(function() {
   $.get('/get/leaderboard?place=US', function (response) {
     leaderboard = JSON.parse(response)
 
+
     // Create leaderboard table object with list.js
     var values
+
     var options = {
         valueNames: ['name', 'link', 'score', 'days_scored', 'id'],
         item: `<li class="list-group-item entry" onclick="showPlot(this)" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
@@ -262,18 +386,13 @@ $(document).ready(function() {
         pagination: true,
         page: 10,
     };
+    
     leaderboardList = new List('leaderboard', options, values);
 
+    $('.region-picker').select2({});
     // Add entries to leaderboard table
     $.each(leaderboard.Predictions, function (k, prediction) {
-      var scores = JSON.stringify(prediction.scores)
-      leaderboardList.add({
-              name: prediction.submission_name,
-              link: `<a style="margin:0" href="${prediction.source}">Link</a>`,
-              id: k, 
-              score: 1, //dummy value, gets overwritten once a region is selected
-              days_scored: prediction.days_scored,
-      })
+        updateLeaderboardList(k,prediction,region)
     })
 
     // Create region picker object
@@ -282,77 +401,63 @@ $(document).ready(function() {
         $('.region-picker').append('<option value="' + k + '">' + k +'</option>')
       }
     })
-    $('.region-picker').select2({});
+    
 
     // Set World as the default selection
     $('.region-picker').val("US").trigger('change')
 
- 
-   // Filter function for list. Looks at currently selected region in picker and then checks each element in list for 
-   // whether a prediction was made for the region 
+    // Filter function for list. Looks at currently selected region in picker and then checks each element in list for 
+    // whether a prediction was made for the region 
     function filterCountry () {leaderboardList.filter(function(item) {
-      var region = $('.region-picker').select2('data')[0].id
-      if (region in leaderboard.Predictions[item.values().id].scores) {
-        item.values({
-            score: parseInt(leaderboard.Predictions[item.values().id].scores[region]),
-        });
-        return true;
-      } else {
-        return false;
-      }
-      })}
+        region = $('.region-picker').select2('data')[0].id
+        if (region in leaderboard.Predictions[item.values().id].scores) {
+          item.values({
+              score: parseInt(leaderboard.Predictions[item.values().id].scores[region]),
+          });
+          return true;
+        } else {
+          return false;
+        }
+      })
+    }
 
     filterCountry()
 
     // Sort leaderboard by score
     leaderboardList.sort('score', {
           order: "asc"
-      });
+    });
+
     leaderboardList.update()
+    createPlot_all()
 
-
-    // Generate plot from the leading entry in the list
-    function showLeadingPlot () {
-      var region = $('.region-picker').select2('data')[0].id
-      var submissionId = leaderboardList.visibleItems[0]._values.id
-      createPlot(leaderboard.Truth.Dates,
-      leaderboard.Truth[region], 
-      leaderboard.Predictions[submissionId].TimeSeries.Dates,
-      leaderboard.Predictions[submissionId].TimeSeries[region]
-      )
-    }
-    showLeadingPlot()
-    $('.loader').hide()
+    
     
     // Run filter on region picker change
     $('.region-picker').on('select2:select', function (e) {
 
-        var region = $('.region-picker').select2('data')[0].id
+        region = $('.region-picker').select2('data')[0].id
+        $('#loader').show()
         $.get('/get/leaderboard?place='+region, function (response) {
-          leaderboard = JSON.parse(response)
 
-          leaderboardList.clear()
-          // Add entries to leaderboard table
-          $.each(leaderboard.Predictions, function (k, prediction) {
-            var scores = JSON.stringify(prediction.scores)
-            leaderboardList.add({
-                    name: prediction.submission_name,
-                    link: `<a style="margin:0" href="${prediction.source}">Link</a>`,
-                    id: k, 
-                    score: 1, //dummy value, gets overwritten once a region is selected
-                    days_scored: prediction.days_scored,
+            leaderboard = JSON.parse(response)
+            leaderboardList.clear()
+            $.each(leaderboard.Predictions, function (k, prediction) {
+                updateLeaderboardList(k,prediction,region)
             })
-          })
-          filterCountry()
-          leaderboardList.update()
-          showLeadingPlot()
-          leaderboardList.sort('score', {
+            // Add entries to leaderboard table
+            filterCountry()
+            createPlot_all()
+            leaderboardList.sort('score', {
               order: "asc"
-          });
-          leaderboardList.update()
+            });
+            leaderboardList.update()
+            $('#loader').hide()
         })
     })
-  })
+    $('#loader').hide()
+  })//outer fetch
+  
 })
 
 

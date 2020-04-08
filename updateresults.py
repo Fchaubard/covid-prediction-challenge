@@ -43,7 +43,11 @@ def main():
     #                          'place2': [v1,v2,v3...],
 
     final_dict = {}
+    
+
     BASE_DATA_REPO = sys.argv[1]+"/data/"
+
+
 
     # 1. first open JHU and NYT to produce "Truth" key and use JHU and NYT to produce "Truth" matrix
     JHU = os.path.join(BASE_DATA_REPO, 'covid_truth/jhu/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
@@ -104,7 +108,9 @@ def main():
     df_nyt_counties.columns = df_nyt_counties.columns.droplevel(level=0)
     #---
 
-    df_truth = pd.concat([df_nyt_states, df_nyt_counties,df_jhu], axis=0,join="inner").sort_index()
+    # do not include counties for now... df_nyt_counties
+    # df_truth = pd.concat([df_nyt_states, df_nyt_counties,df_jhu], axis=0,join="inner").sort_index()
+    df_truth = pd.concat([df_nyt_states, df_jhu], axis=0,join="inner").sort_index()
     df_truth = df_truth.fillna(0)
 
     final_dict["Truth"] = {}
@@ -156,7 +162,7 @@ def main():
 
             final_scores[submission_id]["TimeSeries"] = {}
             for index, row in submission_df.iterrows():
-                final_scores[submission_id]["TimeSeries"][row.name] = list(row)
+                final_scores[submission_id]["TimeSeries"][row.name] = list([int(i) for i in row] )
             final_scores[submission_id]["TimeSeries"]["Dates"] = list(submission_df.columns)
         except Exception as e:
             print("ERROR ",f , e)
