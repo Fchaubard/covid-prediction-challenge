@@ -13,7 +13,7 @@ from glob import glob
 import copy
 
 #----- setup
-# os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 app = Flask(__name__)
 Bootstrap(app)
 #-----

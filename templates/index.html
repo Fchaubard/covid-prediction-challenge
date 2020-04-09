@@ -154,7 +154,7 @@
       </div>
       <div class="card-body">
 
-        <p>The <a href="/about">mission</a> of this project is to gather the thousands forecasts made on the effects of COVID-19 and evaluate them in a controlled way to clearly decipher which are more accurate and dependable than the others. A good prediction will prove itself correct over time. We scraped thousands of them and developed our own and evaluate them against truth every night and rank them. The hope is that this will help people make informed decisions about how to react to the new realities around them, financial, business, or life decisions. You can submit a predicion <a href="/submit"> here </a> or <a href="/about">contact us!</a></p>
+        <p>The <a href="/about">mission</a> of this project is to gather the thousands of forecasts made on the effects of COVID-19 and evaluate them in a controlled way to clearly decipher which are accurate and dependable, and which are wrong. A good prediction will prove itself more correct every day. So we scraped thousands of these forecasts and developed this project which evaluates them against truth pulled from the <a href="https://www.who.int/" target="_blank">World Health Orgnization </a> every night and ranks them best on <a href="https://en.wikipedia.org/wiki/Mean_absolute_error" target="_blank"> Mean Absolute Error</a>. The hope is that this will help people use the accurate predictions to make informed decisions about how to react to the new realities around them, financial, business, or life decisions. You can submit a predicion <a href="/submit"> here </a> or <a href="/about">contact us!</a></p>
 
       </div>
     </div>
@@ -166,7 +166,7 @@
   <div class="col-sm-12">
     <div class="card">
       <div class="header">
-        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">COVID-19 Prediction Leaderboard</h4>
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase">Most Accurate Predictions Leaderboard</h4>
       </div>
       <div class="card-body">
 
@@ -287,12 +287,16 @@ function createPlot_all () {
       type: 'scatter',
       x: leaderboard.Truth.Dates,
       y: leaderboard.Truth[region],
-      mode: 'lines',
+      mode: 'lines+markers',
       name: 'WHO Truth Data',
+      marker: {
+        color: 'rgba(0, 0, 0, 1)',
+        size: 8
+      },
       line: {
         color: 'rgba(0, 0, 0, 1)',
         width: 5
-        }
+      }
     };
 
     var data = [truth];
@@ -309,7 +313,7 @@ function createPlot_all () {
                       line: {
                         dash: 'dot',
                         color: prediction.color,
-                        width: 4
+                        width: 3
                       },
                     }
                   )
@@ -384,7 +388,7 @@ $(document).ready(function() {
               </div>
               </li>`,
         pagination: true,
-        page: 10,
+        page: 30,
     };
     
     leaderboardList = new List('leaderboard', options, values);

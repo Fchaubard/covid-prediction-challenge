@@ -44,3 +44,4 @@ ADD . ./
 CMD cd $APP_HOME && \
   exec gunicorn --bind :80 --workers 1 --threads 8 app:app
 
+
