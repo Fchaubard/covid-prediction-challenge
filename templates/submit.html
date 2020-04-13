@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,6 +48,7 @@
   align-items: center;
   justify-content: center;
 }
+.hider {display: none;}
   </style>
 </head>
 
@@ -79,60 +81,116 @@
 <!-- Body -->
 <body>
 
+  <div class="row" style="margin-top: 2em;">
 
-<h3> Submitting a predictions.csv: </h3>
-<ol>
-<li>Please look at <a href="./data/all_data.csv"> all_data.csv (populated nightly)</a> for the full truth file we will use to match columns and rows to.</li>
-<li> The dates must be in YYYY-MM-DD format and be in order. </li>
-<li> The countries, states, and counties should all be titled the same as the <a href="./data/all_data.csv"> all_data.csv</a> file as discussed above.</li>
-<li> Please title your submission file predictions.csv.</li>
-<li> Please include your source code so others can leverage your experience.</li>
-<li>***"Georgia" could mean the country or the state. We could have used country codes, etc, but we wanted to make submitting easy, so just use "Georgia_State" to refer to the state and "Georgia" for the country. This is the only change we make to the raw data pulled from NYT and JHU before scoring.</li>
-</ol>
+  <div class="col-sm-8">
+    <div class="card" id="description">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase"> How to submit a prediction</h4>
+      </div>
+      <div class="card-body">
 
-<h3> What is this doing that is not being done on Kaggle? </h3>
-As mentioned, there are 2 Kaggle competitions for this. The reasons (listed below) prompted us to launch this project to be disparate from the Kaggle format:
-<ol>
-<li> This is a rolling evaluation vs. a strict start / end date which allows constant submitting throughout the crisis vs. a "date" when the competition stops. All people should be able to submit all the time to allow for as many predictions as possible with maximum amount of information. As priors change, all submitters can easily update the predictions and that can be used to update the public on the implications of that domain shift quickly.</li>
-<li> The point of predicting how long this is going to last, how many people will die, in each country, state and county, etc, is NOT to win a competition, but to inform and warn the public as quickly as possible to act accordingly. The results of the predictions in Kaggle are remarkably useless. There is not interactive chart to go through each, especially the good ones, and use the prediction to make decisions. If the prediction does not change someone's behavior, it is useless. </li>
-<li> The predictions must be comprehensive. All predictions on the web should be compared to ensure the best one is easily shown. They should include predictions from medical journals, the CDC, the WHO, and the AI community. Kaggle is not acitvely scraping predictions off the web to add to the page, we are.</li>
-<li> People care most about what is going to happen and when in their local community. The predictions should therefore be against all local municipalities as well. Country, State, Counties, etc. The Kaggle competition is evaluating on a strict subset of this.</li>
-</ol>
+        Getting started is very easy. We provide a starter <a href="https://colab.research.google.com/drive/1yq_IDR2qW4i4wddab-Xg7O3GksuP88Jj">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
+        <br/>
+        <br/>
+        Your must produce a predictions.csv which must include dates as the columns (YYYY-MM-DD) and the "place" as the rows (Country or State as listed in <a href="./data/all_data.csv">all_data.csv</a>). Each value for a place and date should be the estimated cumulative sum of fatalities on that date for that place. We chose only fatalities since infections is highly contingenet upon proper testing and reporting which is much noisier data. Later, if people are using this tool, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
+        <br/>
+        <br/>
+        In the form below, you can submit the predictions.csv, author name / email, and optionally add a github link / ipython nb / source repo.  Further notes for authors below:
+        <ol>
+        <li>Please look at <a href="./data/all_data.csv"> all_data.csv (populated nightly)</a> for the full truth file we will use to match columns and rows to.</li>
+        <li> The dates must be in YYYY-MM-DD format and be in order. </li>
+        <li> The countries, states, and counties should all be titled the same as the <a href="./data/all_data.csv"> all_data.csv</a> file as discussed above.</li>
+        <li> Please title your submission file predictions.csv.</li>
+        <li> Please include your source code so others can leverage your experience.</li>
+        <li>***"Georgia" could mean the country or the state. We could have used country codes, etc, but we wanted to make submitting easy, so just use "Georgia_State" to refer to the state and "Georgia" for the country. This is the only change we make to the raw data pulled from NYT and JHU before scoring.</li>
+        </ol>
+        </div>
+        </div>
+      </div>
+ 
 
 
-<h1 id="getting_started">Getting started</h1>
-Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
-A predictions.csv must initially include the following columns: date (YYYY-MM-DD) starting a week after submission date (all previous dates/rows will be ignored anyway), # of people infected globally, and death rate globally. Then later if people are using this, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
+  <div class="col-sm-4">
+    <div class="card" id="submitForm">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase"> Submit a prediction!</h4>
+      </div>
+      <div class="card-body" style="display: flex;
+      align-items: center;">
 
-In the submit prediction form, you can submit the csv, name of submitter, and optionally add a github link / ipython nb. 
-
-<h1 id="submissions">Submissions</h1>
-
-<!-- TODO: PREVENT DOUBLE CLICKS! -->
-
-<!-- <form enctype="multipart/form-data" method="post" action="{{ url_for('submit_form') }}" name="form_submit"> -->
-<div id="formdiv">
-<form enctype="multipart/form-data" method="post" name="form_submit"> 
-  <div class="form-group"> <!-- name/email -->
-    <label for="email">Email address</label>
-    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+    <!-- TODO: PREVENT DOUBLE CLICKS! -->
+<div id="formdiv" style="width:100%">
+  <form enctype="multipart/form-data" method="post" name="form_submit"> 
+    <div class="form-group"> <!-- name/email -->
+      <label for="email" class='text-uppercase'>Email address</label>
+      <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+    </div>
+  
+    <div class="form-group"> <!-- source -->
+      <label for="source"  class='text-uppercase'>Source Code / Repo / Website / etc</label>
+      <input class="form-control" name="source" id="source" placeholder="https://github.com/..." required>
+    </div>
+    <div class="form-group"> <!-- predictions.csv -->
+      <label for="file"  class='text-uppercase'>PREDICTIONS CSV</label>
+      <input type="file" class="form-control-file" id="file" name="file" required>
+    </div>
+    <button type="submit" id="submitt" class="btn btn-secondary w-100">Submit</button>
+  </form>
+  <div id="failed_submit">
   </div>
+  </div>
+        </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="form-group"> <!-- source -->
-    <label for="source">Source Code / Repo / Website / etc</label>
-    <input class="form-control" name="source" id="source" placeholder="https://github.com/..." required>
-  </div>
-  <div class="form-group"> <!-- predictions.csv -->
-    <label for="file">Example file input</label>
-    <input type="file" class="form-control-file" id="file" name="file" required>
-  </div>
-  <button type="submit" id="submitt" class="btn btn-primary">Submit</button>
-</form>
-<div id="failed_submit">
+
+
+
+<div  id="success" class="alert alert-success alert-dismissible fade show hider" style="
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;" role="alert">
+  <span id="innerSuccess"> </span> 
 </div>
+
+<div id="failure" class="alert alert-danger alert-dismissible fade show hider" style="
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;" role="alert">
+  <span id="innerFailure"> </span> 
 </div>
+
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="/static/material.js"></script>
+
 
 <script>
+
+
+$(window).resize(function () {
+  $("#submitForm").css("height", $("#description").outerHeight()+"px")
+});
+$(document).ready(function() {
+  $("#submitForm").css("height", $("#description").outerHeight()+"px")
+});
+
+
   var form = document.forms.namedItem("form_submit");
   form.addEventListener('submit', function(ev) {
 
@@ -140,19 +198,37 @@ In the submit prediction form, you can submit the csv, name of submitter, and op
           oData = new FormData(form);
 
       var oReq = new XMLHttpRequest();
-      oReq.open("POST", "{{url_for('submit_form')}}", true);
+      oReq.open("POST", "/submit_form", true);
       oReq.onload = function(oEvent) {
         console.log("here",oReq.response)
         console.log("here",oReq.responseText)
         if (oReq.status == 200) {
           if (oReq.responseText=="OK"){
-            document.getElementById("formdiv").innerHTML = "Success! Thank you for contributing to the project! Your submission will begin posting results in 7 days."
+            console.log(1)
+            $('#success').removeClass('hider')
+            $('#success').addClass('show')
+            setTimeout(function () {
+              $('#success').removeClass('show')
+            }, 3500);
+
+            document.getElementById("innerSuccess").innerHTML = "Success! Thank you for contributing to the project! Your submission will begin posting results in 7 days."
           } else {
-            document.getElementById("failed_submit").innerHTML = "Failed! Please try again. Reason:" + oReq.responseText
+
+            $('#failure').removeClass('hider')
+            $('#failure').addClass('show')
+            setTimeout(function () {
+              $('#failure').removeClass('show')
+            }, 3500);
+            document.getElementById("innerFailure").innerHTML = "Failed! Please try again. Reason:" + oReq.responseText
          
           }
         } else {
-          document.getElementById("failed_submit").innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+          $('#failure').removeClass('hider')
+            $('#failure').addClass('show')
+            setTimeout(function () {
+              $('#failure').removeClass('show')
+            }, 3500);
+          document.getElementById("innerFailure").innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
         }
       };
 
@@ -162,20 +238,4 @@ In the submit prediction form, you can submit the csv, name of submitter, and op
     false);
 </script>
 
-
-
-
-<h1>Contributing to the Core Project</h1>
-If you would like to help on this project or you have any questions, please send a note to fchaubard [[at]] gmail.com. 
-</div>
-</div>
-
-
-
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-<script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-
-
+</html>

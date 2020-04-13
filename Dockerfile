@@ -16,7 +16,7 @@ RUN mkdir -p /usr/local/gcloud \
 RUN rm /tmp/google-cloud-sdk.tar.gz 
 
 # Install production dependencies.
-RUN pip install Flask gunicorn flask-bootstrap pandas gsutil werkzeug
+RUN pip install Flask gunicorn flask-bootstrap pandas gsutil werkzeug yagmail
 
 FROM build-stage1 as build-stage2
 
@@ -24,7 +24,7 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 ADD . ./
 
-#RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
+# RUN git clone https://github.com/CSSEGISandData/COVID-19.git $APP_HOME/data
 
 # Setup the cron... this doesnt work on GCE 
 #   moving to Google Cron -> covidepredictions.com/update_leaderboard
@@ -36,8 +36,8 @@ ADD . ./
 #  && cron \
 #  && tail -f /var/log/cron.log
 
-#CMD ["/bin/bash","/app/task.sh"]
-#CMD bash /app/task.sh
+CMD ["/bin/bash","/app/task.sh"]
+CMD bash /app/task.sh
 
 
 # Run the webserver
