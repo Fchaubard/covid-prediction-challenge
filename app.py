@@ -114,7 +114,7 @@ def submit_form():
             yag = yagmail.SMTP('email', 'password')    
             title = 'New Submission on covidpredictions.com!'
             contents = [json.dumps(meta_dict),file_path]
-            yag.send( ["tobias@focal.systems", "francois@focal.systems"],title, contents)
+            yag.send( ["tobiasbehre@gmail.com", "fchaubard@gmail.com"],title, contents)
 	
 
             # with open(UPLOAD_FOLDER + folder_name +"/"+ "metadata.json", 'w') as json_file:
