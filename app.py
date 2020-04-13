@@ -117,8 +117,8 @@ def submit_form():
             yag.send( ["tobiasbehre@gmail.com", "fchaubard@gmail.com"],title, contents)
 	
 
-            # with open(UPLOAD_FOLDER + folder_name +"/"+ "metadata.json", 'w') as json_file:
-            #     json.dump(meta_dict, json_file, indent=4)
+            with open(UPLOAD_FOLDER + folder_name +"/"+ "metadata.json", 'w') as json_file:
+                json.dump(meta_dict, json_file, indent=4)
 
             # TODO: validate the csv file better than this!
             try:
