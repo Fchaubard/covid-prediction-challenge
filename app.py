@@ -9,7 +9,7 @@ from datetime import datetime
 import random
 import string
 from glob import glob
-
+import yagmail
 import copy
 
 #----- setup
@@ -22,6 +22,8 @@ Bootstrap(app)
 
 #----- for uploading
 UPLOAD_FOLDER = '/app/data/google_storage_data/predictions/'
+PARENT_UPLOAD_FOLDER = '/app/data/google_storage_data/'
+
 if not os.path.exists(UPLOAD_FOLDER):
     print("ERROR! NO UPLOAD_FOLDER: ", UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
@@ -104,9 +106,17 @@ def submit_form():
             print("meta_dict" , meta_dict)
             folder_name =  str(now.date()).replace("/","_") +"_"+ randomString(10)
             print("folder_name",folder_name)
+            os.system("mkdir "+PARENT_UPLOAD_FOLDER)
+            os.system("mkdir "+UPLOAD_FOLDER)
             os.system("mkdir "+UPLOAD_FOLDER + folder_name)
             file_path = UPLOAD_FOLDER + folder_name +"/"+ filename
             file.save(file_path)
+            yag = yagmail.SMTP('email', 'password')    
+            title = 'New Submission on covidpredictions.com!'
+            contents = [json.dumps(meta_dict),file_path]
+            yag.send( ["tobiasbehre@gmail.com", "fchaubard@gmail.com"],title, contents)
+	
+
             with open(UPLOAD_FOLDER + folder_name +"/"+ "metadata.json", 'w') as json_file:
                 json.dump(meta_dict, json_file, indent=4)
 

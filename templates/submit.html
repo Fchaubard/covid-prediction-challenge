@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,6 +48,7 @@
   align-items: center;
   justify-content: center;
 }
+.hider {display: none;}
   </style>
 </head>
 
@@ -78,6 +80,7 @@
 
 <!-- Body -->
 <body>
+<<<<<<< HEAD
 <section class="mt-4">
   <div class="col-sm-12">
     <div class="card">
@@ -88,6 +91,19 @@
 
         <h1 id="getting_started">Getting started</h1>
         Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
+=======
+
+  <div class="row" style="margin-top: 2em;">
+
+  <div class="col-sm-8">
+    <div class="card" id="description">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase"> How to submit a prediction</h4>
+      </div>
+      <div class="card-body">
+
+        Getting started is very easy. We provide a starter <a href="https://colab.research.google.com/drive/1yq_IDR2qW4i4wddab-Xg7O3GksuP88Jj">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
+>>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
         <br/>
         <br/>
         Your must produce a predictions.csv which must include dates as the columns (YYYY-MM-DD) and the "place" as the rows (Country or State as listed in <a href="./data/all_data.csv">all_data.csv</a>). Each value for a place and date should be the estimated cumulative sum of fatalities on that date for that place. We chose only fatalities since infections is highly contingenet upon proper testing and reporting which is much noisier data. Later, if people are using this tool, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
@@ -102,6 +118,7 @@
         <li> Please include your source code so others can leverage your experience.</li>
         <li>***"Georgia" could mean the country or the state. We could have used country codes, etc, but we wanted to make submitting easy, so just use "Georgia_State" to refer to the state and "Georgia" for the country. This is the only change we make to the raw data pulled from NYT and JHU before scoring.</li>
         </ol>
+<<<<<<< HEAD
 
         <h1 id="submissions">Submissions</h1>
 
@@ -130,14 +147,100 @@
         </div>
         <h1>Contributing to the Core Project</h1>
         If you would like to help on this project or you have any questions, please send a note to fchaubard [[at]] gmail.com. 
+=======
+        </div>
+        </div>
+      </div>
+ 
+
+
+  <div class="col-sm-4">
+    <div class="card" id="submitForm">
+      <div class="header">
+        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase"> Submit a prediction!</h4>
+      </div>
+      <div class="card-body" style="display: flex;
+      align-items: center;">
+
+    <!-- TODO: PREVENT DOUBLE CLICKS! -->
+<div id="formdiv" style="width:100%">
+  <form enctype="multipart/form-data" method="post" name="form_submit"> 
+    <div class="form-group"> <!-- name/email -->
+      <label for="email" class='text-uppercase'>Email address</label>
+      <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+    </div>
+  
+    <div class="form-group"> <!-- source -->
+      <label for="source"  class='text-uppercase'>Source Code / Repo / Website / etc</label>
+      <input class="form-control" name="source" id="source" placeholder="https://github.com/..." required>
+    </div>
+    <div class="form-group"> <!-- predictions.csv -->
+      <label for="file"  class='text-uppercase'>PREDICTIONS CSV</label>
+      <input type="file" class="form-control-file" id="file" name="file" required>
+    </div>
+    <button type="submit" id="submitt" class="btn btn-secondary w-100">Submit</button>
+  </form>
+  <div id="failed_submit">
+  </div>
+  </div>
+>>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
         </div>
         </div>
       </div>
     </div>
+<<<<<<< HEAD
   </div>
 </section>
 </body>
+=======
+
+
+
+
+<div  id="success" class="alert alert-success alert-dismissible fade show hider" style="
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;" role="alert">
+  <span id="innerSuccess"> </span> 
+</div>
+
+<div id="failure" class="alert alert-danger alert-dismissible fade show hider" style="
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;" role="alert">
+  <span id="innerFailure"> </span> 
+</div>
+
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="/static/material.js"></script>
+
+
+>>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
 <script>
+
+
+$(window).resize(function () {
+  $("#submitForm").css("height", $("#description").outerHeight()+"px")
+});
+$(document).ready(function() {
+  $("#submitForm").css("height", $("#description").outerHeight()+"px")
+});
+
+
   var form = document.forms.namedItem("form_submit");
   form.addEventListener('submit', function(ev) {
 
@@ -145,19 +248,37 @@
           oData = new FormData(form);
 
       var oReq = new XMLHttpRequest();
-      oReq.open("POST", "{{url_for('submit_form')}}", true);
+      oReq.open("POST", "/submit_form", true);
       oReq.onload = function(oEvent) {
         console.log("here",oReq.response)
         console.log("here",oReq.responseText)
         if (oReq.status == 200) {
           if (oReq.responseText=="OK"){
-            document.getElementById("formdiv").innerHTML = "Success! Thank you for contributing to the project! Your submission will begin posting results in 7 days."
+            console.log(1)
+            $('#success').removeClass('hider')
+            $('#success').addClass('show')
+            setTimeout(function () {
+              $('#success').removeClass('show')
+            }, 3500);
+
+            document.getElementById("innerSuccess").innerHTML = "Success! Thank you for contributing to the project! Your submission will begin posting results in 7 days."
           } else {
-            document.getElementById("failed_submit").innerHTML = "Failed! Please try again. Reason:" + oReq.responseText
+
+            $('#failure').removeClass('hider')
+            $('#failure').addClass('show')
+            setTimeout(function () {
+              $('#failure').removeClass('show')
+            }, 3500);
+            document.getElementById("innerFailure").innerHTML = "Failed! Please try again. Reason:" + oReq.responseText
          
           }
         } else {
-          document.getElementById("failed_submit").innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+          $('#failure').removeClass('hider')
+            $('#failure').addClass('show')
+            setTimeout(function () {
+              $('#failure').removeClass('show')
+            }, 3500);
+          document.getElementById("innerFailure").innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
         }
       };
 
@@ -167,6 +288,7 @@
     false);
 </script>
 
+<<<<<<< HEAD
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
@@ -175,3 +297,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 
 
+=======
+</html>
+>>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
