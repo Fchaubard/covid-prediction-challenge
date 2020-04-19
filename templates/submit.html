@@ -80,18 +80,7 @@
 
 <!-- Body -->
 <body>
-<<<<<<< HEAD
-<section class="mt-4">
-  <div class="col-sm-12">
-    <div class="card">
-      <div class="header">
-        <h4 class="card-title m-0 p-2 text-white font-weight-bold text-uppercase"> Submitting a predictions.csv</h4>
-      </div>
-      <div class="card-body">
 
-        <h1 id="getting_started">Getting started</h1>
-        Getting started is very easy. We provide a starter <a href="https://github.com/Fchaubard/covid-prediction-challenge/blob/master/templates/ipython/predict%20covid-19.ipynb">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
-=======
 
   <div class="row" style="margin-top: 2em;">
 
@@ -103,7 +92,7 @@
       <div class="card-body">
 
         Getting started is very easy. We provide a starter <a href="https://colab.research.google.com/drive/1yq_IDR2qW4i4wddab-Xg7O3GksuP88Jj">ipython notebook</a> that will download all the most recent data and create a naïve predictions.csv that you can drag and drop into the submit form. This is only a helper script and not required to be used at all. 
->>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
+
         <br/>
         <br/>
         Your must produce a predictions.csv which must include dates as the columns (YYYY-MM-DD) and the "place" as the rows (Country or State as listed in <a href="./data/all_data.csv">all_data.csv</a>). Each value for a place and date should be the estimated cumulative sum of fatalities on that date for that place. We chose only fatalities since infections is highly contingenet upon proper testing and reporting which is much noisier data. Later, if people are using this tool, we can add country level predictions, and age level predictions. We will report scores for all submissions above a certain accuracy. 
@@ -118,36 +107,6 @@
         <li> Please include your source code so others can leverage your experience.</li>
         <li>***"Georgia" could mean the country or the state. We could have used country codes, etc, but we wanted to make submitting easy, so just use "Georgia_State" to refer to the state and "Georgia" for the country. This is the only change we make to the raw data pulled from NYT and JHU before scoring.</li>
         </ol>
-<<<<<<< HEAD
-
-        <h1 id="submissions">Submissions</h1>
-
-        <!-- TODO: PREVENT DOUBLE CLICKS! -->
-
-        <!-- <form enctype="multipart/form-data" method="post" action="{{ url_for('submit_form') }}" name="form_submit"> -->
-        <div id="formdiv">
-        <form enctype="multipart/form-data" method="post" name="form_submit"> 
-          <div class="form-group"> <!-- name/email -->
-            <label for="email">Email address</label>
-            <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
-          </div>
-
-          <div class="form-group"> <!-- source -->
-            <label for="source">Source Code / Repo / Website / etc</label>
-            <input class="form-control" name="source" id="source" placeholder="https://github.com/..." required>
-          </div>
-          <div class="form-group"> <!-- predictions.csv -->
-            <label for="file">Example file input</label>
-            <input type="file" class="form-control-file" id="file" name="file" required>
-          </div>
-          <button type="submit" id="submitt" class="btn btn-primary">Submit</button>
-        </form>
-        <div id="failed_submit">
-        </div>
-        </div>
-        <h1>Contributing to the Core Project</h1>
-        If you would like to help on this project or you have any questions, please send a note to fchaubard [[at]] gmail.com. 
-=======
         </div>
         </div>
       </div>
@@ -183,16 +142,11 @@
   <div id="failed_submit">
   </div>
   </div>
->>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
-        </div>
-        </div>
-      </div>
-    </div>
-<<<<<<< HEAD
   </div>
-</section>
-</body>
-=======
+  </div>
+</div>
+</div>
+
 
 
 
@@ -229,7 +183,6 @@
 <script src="/static/material.js"></script>
 
 
->>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1
 <script>
 
 
@@ -288,15 +241,5 @@ $(document).ready(function() {
     false);
 </script>
 
-<<<<<<< HEAD
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-<script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-
-
-=======
 </html>
->>>>>>> 3c5bb05fec6d2ec0911025ca72e4c5589c01dff1

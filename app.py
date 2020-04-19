@@ -13,7 +13,7 @@ import yagmail
 import copy
 
 #----- setup
-os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
+# os.system("bash /app/task.sh") # I can not figure out any other way to do this!! :(
 app = Flask(__name__)
 Bootstrap(app)
 #-----
@@ -39,16 +39,20 @@ def get_subset_of_lb_for_place(data, place):
             data_smaller["Truth"][place_]=[]
 
     for submission_id in data["Predictions"].keys():
-        if place in data["Predictions"][submission_id]['TimeSeries']:
-            for place_ in data["Predictions"][submission_id]['TimeSeries'].keys():
-                if not (place_==place or place_=="Dates"):
-                    try:
-                        del data_smaller["Predictions"][submission_id]['TimeSeries'][place_]
-                    except Exception:
-                        pass
-            data_smaller["Predictions"][submission_id]["scores"] = {place : data["Predictions"][submission_id]["scores"][place]}
-        else:
-            del data_smaller["Predictions"][submission_id]
+        try:
+            if place in data["Predictions"][submission_id]['TimeSeries']:
+                for place_ in data["Predictions"][submission_id]['TimeSeries'].keys():
+                    if not (place_==place or place_=="Dates"):
+                        try:
+                            del data_smaller["Predictions"][submission_id]['TimeSeries'][place_]
+                        except Exception:
+                            pass
+                data_smaller["Predictions"][submission_id]["scores"] = {place : data["Predictions"][submission_id]["scores"][place]}
+            else:
+                del data_smaller["Predictions"][submission_id]
+        except Exception as e:
+            print("ERROR", submission_id)
+            print(e)
 
     return data_smaller
 
@@ -234,5 +238,4 @@ def download_file(filename):
                                filename, as_attachment=True)
 
 if __name__ == "__main__":
-    print("SKDJKSJFDSK")
     app.run(debug=True, host='0.0.0.0', port=80)

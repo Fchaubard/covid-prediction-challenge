@@ -180,7 +180,7 @@
                     <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">AUTHOR</p>
                     <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">SOURCE</p>
                     <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%">DAYS SCORED</p>
-                    <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%"> SCORE <a href="https://en.wikipedia.org/wiki/Mean_absolute_error" target="_blank">(?)</a> </p>
+                    <p class="name" style="text-align:center; margin-bottom:0; margin:0px; width:25%"> ERROR <a href="https://en.wikipedia.org/wiki/Mean_absolute_error" target="_blank">(?)</a> </p>
                     
                 </div>
                 <div class="loader" id="loader" style="margin: auto;" >
@@ -190,6 +190,8 @@
             </div>
           </div>
           <div class="col-sm-7" style="width:100%;height:100%">
+            <input type='checkbox' onchange='handle_dydx(this);'>dy/dx</input>
+
             <div id="leaderboard-plot" style="width:100%;height:100%"></div>
           </div>
         </div>      
@@ -279,14 +281,63 @@ var colors = [
 //   Plotly.newPlot('leaderboard-plot', data, layout);
 // }
 
-function createPlot_all () {
+
+
+function diff(listt) {
+    var i;
+    var dif = [];
+
+    for (i = 1; i < listt.length; i++) {
+       dif.push( listt[i] - listt[i-1])
+    }
+
+    return dif;
+}
+
+
+var dydx = false
+var submissionId = ""
+
+function handle_dydx(checkbox){
+  console.log("checked!")
+  dydx=checkbox.checked;
+  createPlot_all(submissionId)
+}
+
+
+function handle_individual_prediction(el){
+
+  var submissionId_temp = el.querySelector('.id').innerText
+  console.log("clicked individual!", submissionId_temp)
+  if (submissionId==submissionId_temp){
+    submissionId = ""
+    createPlot_all(submissionId)
+  }else{
+    submissionId = submissionId_temp
+    createPlot_all(submissionId)
+  }
+
+}
+
+
+
+
+function createPlot_all (submissionId) {
 
     region = $('.region-picker').select2('data')[0].id
+
+
+
+    if (dydx){
+          yy = diff(leaderboard.Truth[region])
+        } else {
+          yy = leaderboard.Truth[region]
+    }
 
     truth = {
       type: 'scatter',
       x: leaderboard.Truth.Dates,
-      y: leaderboard.Truth[region],
+      y: yy,
       mode: 'lines+markers',
       name: 'WHO Truth Data',
       marker: {
@@ -300,30 +351,49 @@ function createPlot_all () {
     };
 
     var data = [truth];
-    $.each(leaderboard.Predictions, function (k, prediction) {
-      console.log(prediction.submission_name) 
-      data.push(
 
-                    {
-                      type: 'scatter',
-                      x: prediction.TimeSeries.Dates,
-                      y: prediction.TimeSeries[region],
-                      mode: 'lines',
-                      name: prediction.submission_name,
-                      line: {
-                        dash: 'dot',
-                        color: prediction.color,
-                        width: 3
-                      },
-                    }
-                  )
+
+
+    var i=0
+    $.each(leaderboard.Predictions, function (k, prediction) {
+      // console.log(prediction.submission_name, parseInt(prediction.scores[region])) 
+      if ( parseInt(prediction.scores[region]) < 10000 || submissionId!=""){
+
+
+
+        if (dydx){
+          yy = diff(prediction.TimeSeries[region])
+        } else {
+          yy = prediction.TimeSeries[region]
+        }
+
+
+        if (submissionId=="" || submissionId==k ){
+          data.push(
+
+                        {
+                          type: 'scatter',
+                          x: prediction.TimeSeries.Dates,
+                          y: yy,
+                          mode: 'lines',
+                          name: prediction.submission_name,
+                          line: {
+                            dash: 'dot',
+                            color: colors[i],
+                            width: 3
+                          },
+                        }
+                      )
+        }
+      }
+      i+=1
     })
+
+
 
     var layout = {
         title: 'Deaths: Truth vs. Prediction',
-        responsive: true,
         hovermode: 'compare',
-        
         height: 700,
         legend: {
           x: 0,
@@ -335,22 +405,24 @@ function createPlot_all () {
         },
     };
 
-  
+  var config = {responsive: true}
 
-  Plotly.newPlot('leaderboard-plot', data, layout);
+  Plotly.newPlot('leaderboard-plot', data, layout, config);
 }
 
-// Change plot when leaderboard entry is clicked
-function showPlot (el) {
-  // var submissionId = el.querySelector('.id').innerText
-  // var region = $('.region-picker').select2('data')[0].id
-  createPlot_all()
-  // createPlot(leaderboard.Truth.Dates,
-  // leaderboard.Truth[region], 
-  // leaderboard.Predictions[submissionId].TimeSeries.Dates,
-  // leaderboard.Predictions[submissionId].TimeSeries[region]
-  // )
-}
+// // Change plot when leaderboard entry is clicked
+// function showPlot (el) {
+//   console.log("ahsfdhasdfa")
+//   console.log(el,"asfda")
+//   // var submissionId = el.querySelector('.id').innerText
+//   // var region = $('.region-picker').select2('data')[0].id
+//   createPlot_all("")
+//   // createPlot(leaderboard.Truth.Dates,
+//   // leaderboard.Truth[region], 
+//   // leaderboard.Predictions[submissionId].TimeSeries.Dates,
+//   // leaderboard.Predictions[submissionId].TimeSeries[region]
+//   // )
+// }
 
 
 // Change plot when leaderboard entry is clicked
@@ -362,6 +434,7 @@ function updateLeaderboardList (k,prediction,region) {
             id: k, 
             score: prediction.scores[region], //dummy value, gets overwritten once a region is selected
             days_scored: prediction.days_scored,
+            type:prediction.type
     })
 }
 
@@ -378,7 +451,7 @@ $(document).ready(function() {
 
     var options = {
         valueNames: ['name', 'link', 'score', 'days_scored', 'id'],
-        item: `<li class="list-group-item entry" onclick="showPlot(this)" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
+        item: `<li class="list-group-item entry" onclick="handle_individual_prediction(this)" style="padding:0; display:flex; border-right: solid 1px #5C3B6F; border-bottom: solid 1px #5C3B6F; border-left: solid 1px #5C3B6F;padding: 10px">
                 <div class="d-flex justify-content-center align-items-center" style="width: 100%; margin:0">
                   <p class="name" style="text-align:center; margin:0; width:25%"></p>
                 <div class="link w-25 text-center"></div>
@@ -433,7 +506,7 @@ $(document).ready(function() {
     });
 
     leaderboardList.update()
-    createPlot_all()
+    createPlot_all(submissionId)
 
     
     
@@ -451,7 +524,7 @@ $(document).ready(function() {
             })
             // Add entries to leaderboard table
             filterCountry()
-            createPlot_all()
+            createPlot_all(submissionId)
             leaderboardList.sort('score', {
               order: "asc"
             });

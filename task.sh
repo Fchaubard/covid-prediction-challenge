@@ -1,5 +1,5 @@
 #!/bin/sh
-BASEDIR=/app
+BASEDIR=./
 REPOSRC=https://github.com/CSSEGISandData/COVID-19.git
 LOCALREPO=$BASEDIR/data/covid_truth/jhu/
 
